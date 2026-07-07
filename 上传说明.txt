@@ -1,0 +1,27 @@
+免费推广上传说明
+================
+
+推荐方式一：Gitee Pages
+1. 注册或登录 Gitee。
+2. 新建公开仓库，例如 media-downloader。
+3. 上传本文件夹里的全部内容。
+4. 开启 Gitee Pages。
+5. 得到一个公开网址后，把 sitemap.xml 里的 https://example.com/ 改成你的真实网址。
+
+推荐方式二：GitHub Pages
+1. 注册或登录 GitHub。
+2. 新建公开仓库，例如 media-downloader。
+3. 上传本文件夹里的全部内容。
+4. 在 Settings -> Pages 里启用 Pages。
+5. 得到公开网址后，把 sitemap.xml 里的 https://example.com/ 改成你的真实网址。
+
+推荐方式三：CSDN / 博客园 / 知乎
+1. 复制“发布平台文案.txt”的内容。
+2. 插入下载链接，可以使用网盘链接或 Pages 链接。
+3. 标题里保留关键词：媒体下载器、Chrome扩展、抖音、B站、小红书、YouTube、免费下载。
+
+让搜索引擎更容易搜到：
+1. 标题和正文自然出现关键词，不要堆太多。
+2. 发布后把网址发到多个平台。
+3. 页面不要写破解、去水印、搬运版权视频等敏感词。
+4. 如果用 GitHub/Gitee Pages，建议再发一篇 CSDN 或知乎文章指向这个页面。
