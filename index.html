@@ -15,18 +15,19 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #0e0f12;
-      --bg-1: #131418;
-      --bg-2: #17181c;
-      --bg-3: #1d1e23;
-      --line: #26272d;
-      --line-soft: #1c1d22;
-      --ink: #ececef;
-      --ink-2: #a4a4ad;
-      --ink-3: #6b6b75;
-      --accent: #7c5cff;
-      --accent-2: #5b8def;
-      --accent-3: #22d3ee;
+      --bg: #0a0a12;
+      --bg-1: #10101a;
+      --bg-2: #181826;
+      --bg-3: #1f1f2e;
+      --line: #2a2a3d;
+      --line-soft: #232334;
+      --ink: #e4e6ee;
+      --ink-2: #c0c4d3;
+      --ink-3: #9aa1b5;
+      --accent: #7fb0ff;
+      --accent-2: #c585ff;
+      --accent-3: #6e5cff;
+      --accent-4: #3aa0ff;
       --ok: #4ade80;
       --warn: #facc15;
     }
@@ -79,12 +80,12 @@
       transition: background .15s ease, border-color .15s ease, color .15s ease, transform .15s ease;
     }
     .btn-sm { padding: 8px 14px; min-height: 34px; font-size: 13px; border-radius: 7px; }
-    .btn-primary { background: #ffffff; color: #0e0f12; }
-    .btn-primary:hover { background: #f0f0f3; }
+    .btn-primary { background: linear-gradient(120deg, #6e5cff, #3aa0ff); color: #fff; box-shadow: 0 8px 24px rgba(110, 92, 255, .25); }
+    .btn-primary:hover { filter: brightness(1.12); box-shadow: 0 10px 28px rgba(110, 92, 255, .35); }
     .btn-ghost { background: transparent; color: var(--ink); border-color: var(--line); }
-    .btn-ghost:hover { border-color: var(--ink-2); }
-    .btn-accent { background: var(--accent); color: #fff; }
-    .btn-accent:hover { background: #8e72ff; }
+    .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+    .btn-accent { background: linear-gradient(120deg, #6e5cff, #3aa0ff); color: #fff; }
+    .btn-accent:hover { filter: brightness(1.12); }
     .btn .arr { font-size: 15px; line-height: 1; }
 
     /* legal */
@@ -100,21 +101,66 @@
     .hero {
       position: relative; overflow: hidden;
       padding: 96px 24px 80px;
+      isolation: isolate;
     }
+    /* 顶部紫光晕 + 底部柔光 */
     .hero::before {
-      content: ""; position: absolute; inset: 0;
+      content: ""; position: absolute; inset: 0; pointer-events: none; z-index: -1;
       background:
-        radial-gradient(800px 400px at 50% -10%, rgba(124, 92, 255, .18), transparent 70%),
-        radial-gradient(600px 300px at 90% 10%, rgba(91, 141, 239, .10), transparent 70%);
-      pointer-events: none;
+        radial-gradient(900px 480px at 50% -5%, rgba(127, 176, 255, .18), transparent 70%),
+        radial-gradient(700px 380px at 88% 8%, rgba(197, 133, 255, .12), transparent 70%),
+        radial-gradient(600px 320px at 12% 12%, rgba(110, 92, 255, .10), transparent 70%);
     }
+    /* 缓慢旋转的黑洞光晕（吸积盘 + 事件视界） */
+    .hero::after {
+      content: ""; position: absolute; z-index: -1; pointer-events: none;
+      top: 78%; left: 50%;
+      width: 900px; height: 900px;
+      transform: translate(-50%, -50%);
+      background:
+        radial-gradient(closest-side, transparent 0%, transparent 22%, rgba(127, 176, 255, .10) 24%, rgba(197, 133, 255, .22) 30%, transparent 42%),
+        conic-gradient(from 0deg,
+          transparent 0deg,
+          rgba(127, 176, 255, .18) 40deg,
+          rgba(197, 133, 255, .14) 110deg,
+          transparent 170deg,
+          transparent 220deg,
+          rgba(110, 92, 255, .12) 280deg,
+          rgba(127, 176, 255, .16) 330deg,
+          transparent 360deg);
+      border-radius: 50%;
+      filter: blur(8px);
+      opacity: .55;
+      animation: bh-rotate 90s linear infinite;
+    }
+    @keyframes bh-rotate { to { transform: translate(-50%, -50%) rotate(360deg); } }
+    @media (prefers-reduced-motion: reduce) { .hero::after { animation: none; } }
+
+    /* 静态星点背景（覆盖整页） */
+    body::before {
+      content: ""; position: fixed; inset: 0; z-index: -2; pointer-events: none;
+      background-image:
+        radial-gradient(1px 1px at 12% 18%, rgba(255, 255, 255, .5), transparent 50%),
+        radial-gradient(1px 1px at 28% 62%, rgba(255, 255, 255, .35), transparent 50%),
+        radial-gradient(1px 1px at 47% 28%, rgba(255, 255, 255, .45), transparent 50%),
+        radial-gradient(1px 1px at 68% 78%, rgba(255, 255, 255, .4), transparent 50%),
+        radial-gradient(1px 1px at 82% 12%, rgba(255, 255, 255, .55), transparent 50%),
+        radial-gradient(1.5px 1.5px at 8% 82%, rgba(255, 255, 255, .35), transparent 50%),
+        radial-gradient(1px 1px at 92% 44%, rgba(255, 255, 255, .4), transparent 50%),
+        radial-gradient(1px 1px at 36% 88%, rgba(255, 255, 255, .3), transparent 50%),
+        radial-gradient(1px 1px at 58% 8%, rgba(255, 255, 255, .35), transparent 50%),
+        radial-gradient(1.5px 1.5px at 73% 56%, rgba(255, 255, 255, .3), transparent 50%);
+      opacity: .7;
+    }
+
     .hero-inner { position: relative; max-width: 880px; margin: 0 auto; text-align: center; }
     .hero-eyebrow {
       display: inline-flex; align-items: center; gap: 8px;
       padding: 5px 12px;
-      background: var(--bg-2); border: 1px solid var(--line);
+      background: rgba(24, 24, 38, .7); border: 1px solid var(--line);
       border-radius: 999px; font-size: 12.5px; color: var(--ink-2);
       margin-bottom: 28px;
+      backdrop-filter: blur(6px);
     }
     .hero-eyebrow .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 3px rgba(74, 222, 128, .18); }
     .hero h1 {
@@ -123,7 +169,7 @@
       font-weight: 700; line-height: 1.1; letter-spacing: -0.025em;
       color: var(--ink);
     }
-    .hero h1 .accent { background: linear-gradient(120deg, #ffffff 0%, var(--accent) 60%, var(--accent-2) 100%);
+    .hero h1 .accent { background: linear-gradient(120deg, #ffffff 0%, #7fb0ff 45%, #c585ff 100%);
                        -webkit-background-clip: text; background-clip: text; color: transparent; }
     .hero .tag-en {
       margin: 0 auto 24px; max-width: 600px;
@@ -213,6 +259,51 @@
     .cat-label .en { color: var(--ink-3); letter-spacing: 0.12em; text-transform: uppercase; font-size: 11.5px; }
     .cat-label::after { content: ""; flex: 1; height: 1px; background: var(--line-soft); }
 
+    /* featured card (desktop project) */
+    .featured {
+      display: grid; grid-template-columns: 1.15fr 1fr; gap: 0;
+      background: var(--bg-1); border: 1px solid var(--line);
+      border-radius: 16px; overflow: hidden;
+      transition: border-color .15s ease, background .15s ease;
+    }
+    .featured:hover { border-color: var(--ink-3); }
+    .featured-media {
+      position: relative; aspect-ratio: 16 / 10; overflow: hidden;
+      background: #000;
+    }
+    .featured-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .featured-media .badge {
+      position: absolute; top: 14px; left: 14px;
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 4px 10px; background: rgba(0, 0, 0, .55);
+      border: 1px solid rgba(255, 255, 255, .12);
+      border-radius: 999px; font-size: 11.5px; color: #fff; letter-spacing: .04em;
+      backdrop-filter: blur(8px);
+    }
+    .featured-media .badge::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 3px rgba(74, 222, 128, .25); }
+    .featured-body { padding: 28px 28px 26px; display: flex; flex-direction: column; }
+    .featured-body .tag-line {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 12px; color: var(--ink-3); letter-spacing: 0.12em; text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .featured-body .tag-line .en { color: var(--ink-2); }
+    .featured-body h3 { margin: 0 0 4px; }
+    .featured-body .sub-en {
+      font-size: 12.5px; color: var(--ink-3); letter-spacing: 0.1em; text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    .featured-body .desc { font-size: 14px; color: var(--ink-2); line-height: 1.7; margin: 0 0 18px; }
+    .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 22px; }
+    .tag {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 4px 10px; font-size: 12px;
+      background: var(--bg-2); border: 1px solid var(--line);
+      border-radius: 999px; color: var(--ink-2);
+    }
+    .tag .v { color: var(--ink); font-weight: 600; }
+    .featured-body .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: auto; }
+
     /* footer */
     footer { padding: 56px 0 48px; margin-top: 80px; border-top: 1px solid var(--line-soft); }
     .foot {
@@ -242,6 +333,9 @@
       .hero-trust { gap: 18px; margin-top: 40px; padding-top: 24px; }
       .steps { grid-template-columns: 1fr; }
       .tools-grid { grid-template-columns: 1fr; }
+      .featured { grid-template-columns: 1fr; }
+      .featured-media { aspect-ratio: 16 / 9; }
+      .featured-body { padding: 22px 22px 24px; }
       .foot { grid-template-columns: 1fr; gap: 28px; }
       .legal-mini { flex-direction: column; align-items: flex-start; gap: 6px; }
     }
@@ -403,18 +497,35 @@
 
       <div class="cat-label" style="margin-top: 36px;">
         <span class="bi"><span class="zh">桌面工具</span><span class="en">Desktop tools</span></span>
-        <span class="en">· 01 item</span>
+        <span class="en">· featured · 01 item</span>
       </div>
-      <div class="tools-grid">
-        <a class="tool" href="https://cy156906-glitch.github.io/heidong/" rel="noopener">
-          <div class="tool-head">
-            <span class="tool-icon bh">●</span>
-            <h3 class="bi"><span class="zh">桌面黑洞屏保</span><span class="en">Black-hole screensaver</span></h3>
+
+      <a class="featured" href="https://cy156906-glitch.github.io/heidong/" rel="noopener">
+        <div class="featured-media">
+          <img src="https://cy156906-glitch.github.io/heidong/demo.gif" alt="桌面黑洞屏保演示" loading="lazy">
+          <span class="badge">Live preview</span>
+        </div>
+        <div class="featured-body">
+          <div class="tag-line">
+            <span>独立项目 · External</span>
+            <span class="en">/ github.io / heidong</span>
           </div>
-          <p>独立项目 heidong。Windows 黑洞可视化屏保，空闲显示 / 看视频自动隐藏，14 个参数可调。</p>
-          <div class="tool-foot"><span class="meta">独立项目 · 外部跳转</span><span class="go">访问 ↗</span></div>
-        </a>
-      </div>
+          <h3 class="bi"><span class="zh">桌面黑洞屏保</span><span class="en">Black-hole Screensaver</span></h3>
+          <p class="sub-en">Windows · OpenGL · GLSL · 14 params</p>
+          <p class="desc">基于 Eric Bruneton 黑洞着色器的 Windows 桌面黑洞可视化程序。捕获桌面画面，实时渲染史瓦西黑洞的<strong>引力透镜、吸积盘、光子环</strong>等相对论效应。空闲时自动显示，动鼠标/键盘或看视频时自动隐藏。</p>
+          <div class="tags">
+            <span class="tag"><span class="v">14</span> 可调参数</span>
+            <span class="tag"><span class="v">3</span> 层空闲检测</span>
+            <span class="tag">双进程分离</span>
+            <span class="tag">预设轮播</span>
+            <span class="tag">托盘常驻</span>
+          </div>
+          <div class="actions">
+            <span class="btn btn-accent">访问项目站 <span class="arr">↗</span></span>
+            <span class="btn btn-ghost">下载 Windows zip <span class="arr">↓</span></span>
+          </div>
+        </div>
+      </a>
     </section>
   </main>
 
