@@ -103,38 +103,34 @@
       padding: 96px 24px 80px;
       isolation: isolate;
     }
-    /* 顶部紫光晕 + 底部柔光 */
+    /* hero 底部贴一张真实黑洞渲染图（来自 heidong 工程 demo.gif） */
     .hero::before {
+      content: ""; position: absolute; z-index: -2; pointer-events: none;
+      top: 40%; left: 50%;
+      width: min(1100px, 130%);
+      height: min(1100px, 130%);
+      transform: translate(-50%, -50%);
+      background-image: url("https://cy156906-glitch.github.io/heidong/demo.gif");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      filter: blur(2px) brightness(.55) saturate(1.2) hue-rotate(-10deg);
+      mask-image: radial-gradient(closest-side, #000 0%, #000 40%, transparent 78%);
+      -webkit-mask-image: radial-gradient(closest-side, #000 0%, #000 40%, transparent 78%);
+      opacity: .85;
+    }
+    /* 顶部紫蓝光晕（叠在黑洞图之上增加氛围） */
+    .hero::after {
       content: ""; position: absolute; inset: 0; pointer-events: none; z-index: -1;
       background:
-        radial-gradient(900px 480px at 50% -5%, rgba(127, 176, 255, .18), transparent 70%),
-        radial-gradient(700px 380px at 88% 8%, rgba(197, 133, 255, .12), transparent 70%),
-        radial-gradient(600px 320px at 12% 12%, rgba(110, 92, 255, .10), transparent 70%);
+        radial-gradient(900px 480px at 50% -5%, rgba(127, 176, 255, .22), transparent 70%),
+        radial-gradient(700px 380px at 88% 8%, rgba(197, 133, 255, .14), transparent 70%),
+        radial-gradient(600px 320px at 12% 12%, rgba(110, 92, 255, .12), transparent 70%);
     }
-    /* 缓慢旋转的黑洞光晕（吸积盘 + 事件视界） */
-    .hero::after {
-      content: ""; position: absolute; z-index: -1; pointer-events: none;
-      top: 78%; left: 50%;
-      width: 900px; height: 900px;
-      transform: translate(-50%, -50%);
-      background:
-        radial-gradient(closest-side, transparent 0%, transparent 22%, rgba(127, 176, 255, .10) 24%, rgba(197, 133, 255, .22) 30%, transparent 42%),
-        conic-gradient(from 0deg,
-          transparent 0deg,
-          rgba(127, 176, 255, .18) 40deg,
-          rgba(197, 133, 255, .14) 110deg,
-          transparent 170deg,
-          transparent 220deg,
-          rgba(110, 92, 255, .12) 280deg,
-          rgba(127, 176, 255, .16) 330deg,
-          transparent 360deg);
-      border-radius: 50%;
-      filter: blur(8px);
-      opacity: .55;
-      animation: bh-rotate 90s linear infinite;
+    @media (prefers-reduced-motion: reduce) {
+      /* gif 本身是动图；用静态截图 fallback — 改用黑洞 png 静态图 */
+      .hero::before { background-image: url("https://cy156906-glitch.github.io/heidong/%E9%BB%91%E6%B4%9E%E5%B1%8F%E4%BF%9D.png"); filter: blur(2px) brightness(.55) saturate(1.2) hue-rotate(-10deg); }
     }
-    @keyframes bh-rotate { to { transform: translate(-50%, -50%) rotate(360deg); } }
-    @media (prefers-reduced-motion: reduce) { .hero::after { animation: none; } }
 
     /* 静态星点背景（覆盖整页） */
     body::before {
