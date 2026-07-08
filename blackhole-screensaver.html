@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>桌面黑洞屏保 - 黑洞桌宠 - Windows 黑洞可视化</title>
+  <meta name="description" content="基于 Eric Bruneton 黑洞着色器的 Windows 桌面黑洞可视化程序。支持空闲检测、播放视频时自动隐藏、14 个可调参数。">
+  <meta name="keywords" content="Windows 桌宠, 黑洞屏保, 黑洞桌宠, 桌面黑洞, 黑洞可视化, 黑洞屏保 Windows, Black Hole Screensaver">
+  <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://xiazai-2026.pages.dev/blackhole-screensaver.html">
+  <style>
+    *{box-sizing:border-box}
+    body{margin:0;font-family:"Microsoft YaHei","Segoe UI",Arial,sans-serif;background:#0a0a12;color:#e4e6ee;line-height:1.7}
+    .topbar{background:#10101a;border-bottom:1px solid #232334;padding:14px 22px}
+    .topbar a{color:#7fb0ff;text-decoration:none;font-size:14px}
+    .topbar a:hover{text-decoration:underline}
+    .topbar .brand{color:#fff;font-weight:700;margin-left:14px}
+    .wrap{max-width:980px;margin:0 auto;padding:36px 22px 80px}
+    .hero{padding:32px 0 20px;border-bottom:1px solid #1d1d2a;margin-bottom:30px}
+    .hero h1{font-size:38px;line-height:1.2;margin:0 0 14px;background:linear-gradient(120deg,#fff,#7fb0ff,#c585ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+    .hero p.tag{color:#9aa1b5;font-size:17px;margin:0 0 24px}
+    .badges{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+    .badge{background:#181826;border:1px solid #2a2a3d;border-radius:6px;padding:5px 10px;font-size:12px;color:#9aa1b5}
+    .cta{display:flex;gap:12px;flex-wrap:wrap;margin:18px 0 4px}
+    .btn{display:inline-block;padding:12px 22px;border-radius:8px;text-decoration:none;font-weight:700;font-size:15px}
+    .btn-primary{background:linear-gradient(120deg,#6e5cff,#3aa0ff);color:#fff}
+    .btn-secondary{background:transparent;color:#7fb0ff;border:1px solid #2a2a3d}
+    .btn-primary:hover{filter:brightness(1.1)}
+    .btn-secondary:hover{border-color:#7fb0ff}
+    .section{margin:36px 0}
+    .section h2{font-size:24px;margin:0 0 14px;padding-bottom:8px;border-bottom:1px solid #1d1d2a}
+    .section h3{font-size:17px;margin:22px 0 8px;color:#cfd3e0}
+    .section p, .section li{color:#c0c4d3;font-size:15px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin:18px 0}
+    .feat{background:#10101a;border:1px solid #1d1d2a;border-radius:10px;padding:18px}
+    .feat h3{margin:0 0 8px;font-size:15px;color:#fff}
+    .feat p{margin:0;font-size:13.5px;color:#9aa1b5}
+    .code{background:#0a0a12;border:1px solid #1d1d2a;border-radius:8px;padding:14px 16px;font-family:Consolas,Monaco,monospace;font-size:13.5px;color:#cfd3e0;white-space:pre-wrap;overflow-x:auto}
+    .note{background:#0f0f1c;border-left:4px solid #6e5cff;border-radius:6px;padding:12px 16px;color:#9aa1b5;font-size:14px;margin:16px 0}
+    .note strong{color:#fff}
+    .legal{background:#1a0f12;border:1px solid #5a2a30;border-left:4px solid #d92626;border-radius:6px;padding:12px 16px;color:#ffb8b8;font-size:14px;margin:16px 0}
+    .legal a{color:#ff8c8c;font-weight:700}
+    table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+    th,td{padding:8px 10px;border:1px solid #1d1d2a;text-align:left;color:#c0c4d3}
+    th{background:#10101a;color:#fff;font-weight:600}
+    .footer{text-align:center;color:#5a5e72;font-size:13px;padding:30px 0;border-top:1px solid #1d1d2a;margin-top:40px}
+    .footer a{color:#7fb0ff;text-decoration:none}
+    .cat-label{display:inline-block;background:#1c1c2e;border:1px solid #2a2a3d;color:#9aa1b5;font-size:11px;padding:3px 8px;border-radius:4px;margin-bottom:12px;letter-spacing:0.5px}
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <a href="./">&larr; 返回工具集合</a>
+    <span class="brand">/ 桌面黑洞屏保</span>
+  </div>
+  <main class="wrap">
+    <header class="hero">
+      <span class="cat-label">桌面工具 / DESKTOP</span>
+      <h1>桌面黑洞屏保</h1>
+      <p class="tag">基于 Eric Bruneton 黑洞着色器的 Windows 桌面黑洞可视化程序。空闲自动显示，看视频时自动隐藏，14 个参数可调。</p>
+      <div class="badges">
+        <span class="badge">Windows 10/11</span>
+        <span class="badge">OpenGL + D3D11</span>
+        <span class="badge">空闲检测</span>
+        <span class="badge">完全本地运行</span>
+        <span class="badge">MIT License</span>
+      </div>
+      <div class="cta">
+        <a class="btn btn-primary" href="https://github.com/cy156906-glitch/heidong/releases">下载 Windows 版</a>
+        <a class="btn btn-secondary" href="https://github.com/cy156906-glitch/heidong">查看源码 / GitHub</a>
+      </div>
+    </header>
+
+    <div class="legal">
+      本软件仅在你的本机运行，不联网，不上传任何数据。OpenGL 渲染可能需要较新的显卡驱动。
+    </div>
+
+    <section class="section">
+      <h2>是什么</h2>
+      <p>在桌面上渲染一个真实的史瓦西黑洞——引力透镜、吸积盘、光子环、多普勒效应、相对论性光束都按物理模型实时计算。空闲时显示，动一下鼠标就消失，不会打扰你工作。</p>
+    </section>
+
+    <section class="section">
+      <h2>主要功能</h2>
+      <div class="grid">
+        <div class="feat">
+          <h3>空闲自动触发</h3>
+          <p>设置空闲 N 秒后显示，默认 5 分钟。动鼠标/键盘立即消失。</p>
+        </div>
+        <div class="feat">
+          <h3>看视频自动隐藏</h3>
+          <p>检测到浏览器、游戏、视频播放器在前台时，黑洞不打扰你。</p>
+        </div>
+        <div class="feat">
+          <h3>14 个可调参数</h3>
+          <p>色温、倾角、旋转、半径、不透明度、多普勒、光束、亮度、对比、缠绕、转速、曝光、星空亮度。</p>
+        </div>
+        <div class="feat">
+          <h3>预设管理</h3>
+          <p>支持保存/复制/粘贴预设，多预设顺序/循环/随机播放。</p>
+        </div>
+        <div class="feat">
+          <h3>托盘退出</h3>
+          <p>右下角托盘图标右键可随时退出，资源占用低。</p>
+        </div>
+        <div class="feat">
+          <h3>完全本地</h3>
+          <p>不联网，不上传数据，所有渲染在你自己的电脑上完成。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>两种工作模式</h2>
+      <table>
+        <thead><tr><th>模式</th><th>行为</th></tr></thead>
+        <tbody>
+          <tr><td>始终显示</td><td>黑洞常驻桌面</td></tr>
+          <tr><td>空闲检测</td><td>空闲 N 秒后显示，活跃时自动隐藏</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="section">
+      <h2>使用方法</h2>
+      <ol>
+        <li>下载并解压 ZIP 到任意文件夹。</li>
+        <li>双击 <code>release\blackhole.exe</code>（首次运行会弹出配置窗口）。</li>
+        <li>调整参数 → 点击"启动"。</li>
+        <li>黑洞会在空闲时自动出现在桌面上，动鼠标/键盘即消失。</li>
+        <li>右下角托盘图标 → 右键菜单 → 退出。</li>
+      </ol>
+      <div class="note">
+        <strong>如果双击 exe 没反应：</strong>需要 Windows 10/11，并安装较新的显卡驱动（OpenGL 4.3+）。如果使用 RDP 远程桌面，黑洞渲染可能不可见。
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>支持的视频/游戏应用（自动隐藏黑洞）</h2>
+      <table>
+        <thead><tr><th>类别</th><th>应用</th></tr></thead>
+        <tbody>
+          <tr><td>浏览器</td><td>Chrome, Edge, Firefox, Opera, Brave</td></tr>
+          <tr><td>游戏启动器</td><td>Steam, Epic, Ubisoft, EA, Battle.net, Riot, GOG, Xbox, Game Bar</td></tr>
+          <tr><td>国内视频</td><td>哔哩哔哩, 爱奇艺, 优酷, 芒果TV, 抖音, 快手, 腾讯视频</td></tr>
+          <tr><td>本地播放器</td><td>VLC, MPV, PotPlayer, MPC, WMP, NVIDIA Overlay</td></tr>
+          <tr><td>UWP</td><td>电影和电视, 媒体播放器</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="section">
+      <h2>常见问题</h2>
+      <h3>需要联网吗？</h3>
+      <p>不需要。所有计算都在本地完成，关闭网络也能正常使用。</p>
+      <h3>占用 CPU/GPU 高吗？</h3>
+      <p>黑洞空闲时渲染开销很低（约 5-10% GPU），只在屏幕显示时工作。</p>
+      <h3>支持多显示器吗？</h3>
+      <p>支持，会在所有显示器上同时显示黑洞效果。</p>
+      <h3>怎样彻底关闭？</h3>
+      <p>右下角托盘图标 → 右键 → 退出。或在配置页面取消勾选"启动"。</p>
+    </section>
+
+    <section class="section">
+      <h2>许可与版权</h2>
+      <p>本项目基于 MIT 协议开源。黑洞着色器实现参考 Eric Bruneton 的 <a href="https://beltoforion.de/en/spiele/black-hole-simulation/">Black Hole shader</a>。</p>
+    </section>
+
+    <p class="footer">
+      <a href="./">返回工具集合</a> &nbsp;|&nbsp;
+      <a href="disclaimer.html">免责声明</a> &nbsp;|&nbsp;
+      <a href="https://github.com/cy156906-glitch/heidong">GitHub 仓库</a>
+    </p>
+  </main>
+</body>
+</html>
