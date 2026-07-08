@@ -2,7 +2,7 @@
 ================
 
 发布链接：
-https://cy156906-glitch.github.io/XIAZAI/
+https://xiazai-2026.pages.dev/
 
 下载链接：
 https://github.com/cy156906-glitch/XIAZAI/releases/download/v1.0.0/MediaDownloader-Windows.zip
@@ -17,7 +17,7 @@ https://github.com/cy156906-glitch/XIAZAI/releases/download/v1.0.0/MediaDownload
 支持平台包括：抖音、B站、小红书、YouTube、网易云音乐、X、Envato 等。
 
 下载页面：
-https://cy156906-glitch.github.io/XIAZAI/
+https://xiazai-2026.pages.dev/
 
 说明：
 本工具不破解 DRM，不绕过付费限制。请仅下载你本人有权访问、保存或备份的内容。
@@ -34,7 +34,7 @@ https://cy156906-glitch.github.io/XIAZAI/
 支持抖音、B站、小红书、YouTube、网易云音乐、X、Envato 等链接。
 
 下载地址：
-https://cy156906-glitch.github.io/XIAZAI/
+https://xiazai-2026.pages.dev/
 
 合规提醒：请只下载你有权保存的内容，不要用于搬运或侵权。
 
@@ -43,7 +43,7 @@ https://cy156906-glitch.github.io/XIAZAI/
 做了一个免费的媒体下载器，支持抖音、B站、小红书、YouTube 等链接提交到本机下载服务。复制链接，粘贴到 Chrome 扩展里就能用。
 
 下载页：
-https://cy156906-glitch.github.io/XIAZAI/
+https://xiazai-2026.pages.dev/
 
 仅用于保存自己有权访问和备份的内容。
 
@@ -61,7 +61,7 @@ https://cy156906-glitch.github.io/XIAZAI/
 4. 完全免费，带安装教程。
 
 下载页面：
-https://cy156906-glitch.github.io/XIAZAI/
+https://xiazai-2026.pages.dev/
 
 注意：请遵守平台规则和版权要求，仅下载你有权保存的内容。
 

@@ -1,5 +1,5 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://cy156906-glitch.github.io/XIAZAI/sitemap.xml
-Sitemap: https://cy156906-glitch.github.io/XIAZAI/sitemap.txt
+Sitemap: https://xiazai-2026.pages.dev/sitemap.xml
+Sitemap: https://xiazai-2026.pages.dev/sitemap.txt
