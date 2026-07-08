@@ -10,191 +10,264 @@
   <meta property="og:description" content="免费 Chrome 扩展和本地下载工具，支持主流媒体平台链接下载。">
   <meta property="og:type" content="website">
   <meta property="og:image" content="assets/icon128.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Source+Code+Pro:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #ffffff;
-      --ink: #111111;
-      --ink-2: #4a4a4a;
-      --ink-3: #8a8a8a;
-      --line: #e5e5e5;
-      --line-soft: #f0f0f0;
+      --bg: #0a0a0a;
+      --bg-1: #111113;
+      --bg-2: #16161a;
+      --bg-3: #1d1d22;
+      --line: #2a2a31;
+      --line-soft: #1f1f25;
+      --ink: #e6e6e6;
+      --ink-2: #9a9aa3;
+      --ink-3: #5e5e68;
+      --green: #7ee787;
+      --cyan: #79c0ff;
+      --yellow: #d29922;
+      --red: #f85149;
+      --purple: #d2a8ff;
+      --pink: #ff7b72;
     }
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
     body {
       margin: 0;
-      font-family: "PingFang SC", "Microsoft YaHei", -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+      font-family: "JetBrains Mono", "Source Code Pro", "Source Han Mono SC", "Microsoft YaHei", "PingFang SC", "Inter", monospace, sans-serif;
       color: var(--ink);
       background: var(--bg);
-      line-height: 1.7;
+      line-height: 1.65;
       -webkit-font-smoothing: antialiased;
+      font-feature-settings: "ss01", "calt", "liga";
     }
     a { color: inherit; text-decoration: none; }
 
-    /* 中英双语块：中文在上，英文在下 */
-    .bi { display: flex; flex-direction: column; gap: 2px; }
-    .bi .zh { font-size: 15px; font-weight: 600; color: var(--ink); line-height: 1.5; letter-spacing: .01em; }
-    .bi .en { font-family: "JetBrains Mono", "SFMono-Regular", Menlo, Consolas, monospace;
-              font-size: 11.5px; font-weight: 400; color: var(--ink-3); line-height: 1.4;
-              letter-spacing: .04em; text-transform: uppercase; }
+    /* 中英双语：中文在上，英文在下；统一为终端字体语境 */
+    .bi { display: flex; flex-direction: column; gap: 1px; }
+    .bi .zh { font-family: "Source Han Mono SC", "Microsoft YaHei", "PingFang SC", sans-serif;
+              font-size: 14px; font-weight: 600; color: var(--ink); line-height: 1.55; letter-spacing: .02em; }
+    .bi .en { font-family: "JetBrains Mono", "Source Code Pro", monospace;
+              font-size: 11px; font-weight: 400; color: var(--ink-3); line-height: 1.4;
+              letter-spacing: .08em; text-transform: uppercase; }
+
+    /* 通用容器 */
+    main { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+
+    /* 终端窗口 */
+    .term {
+      background: var(--bg-1);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .term-head {
+      display: flex; align-items: center; gap: 12px;
+      padding: 10px 14px;
+      background: var(--bg-2);
+      border-bottom: 1px solid var(--line);
+      font-size: 11.5px; color: var(--ink-3); letter-spacing: .04em;
+    }
+    .term-dots { display: inline-flex; gap: 6px; }
+    .term-dots i { width: 11px; height: 11px; border-radius: 50%; display: inline-block; background: #3a3a42; }
+    .term-title { flex: 1; text-align: center; }
+    .term-body { padding: 22px 24px 26px; }
+    .term-body.flush { padding: 0; }
+
+    /* 行内语义 */
+    .p-user { color: var(--green); }
+    .p-root { color: var(--red); }
+    .p-host { color: var(--cyan); }
+    .p-path { color: var(--purple); }
+    .c-dim { color: var(--ink-3); }
+    .c-ok { color: var(--green); }
+    .c-warn { color: var(--yellow); }
+    .c-err { color: var(--red); }
+    .c-info { color: var(--cyan); }
+    .c-acc { color: var(--pink); }
+    .c-link { color: var(--cyan); border-bottom: 1px dotted var(--cyan); }
 
     /* topbar */
     .topbar {
       position: sticky; top: 0; z-index: 20;
-      background: rgba(255, 255, 255, .92);
+      background: rgba(10, 10, 10, .85);
       border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(12px);
     }
     .nav {
-      max-width: 1120px; margin: 0 auto; padding: 14px 24px;
+      max-width: 1080px; margin: 0 auto; padding: 12px 24px;
       display: flex; align-items: center; justify-content: space-between; gap: 24px;
     }
     .brand { display: inline-flex; align-items: center; gap: 10px; }
-    .brand img { width: 26px; height: 26px; border-radius: 4px; }
-    .brand .bi .zh { font-size: 15px; }
-    .navlinks { display: flex; gap: 24px; }
-    .navlinks a { font-size: 14px; color: var(--ink-2); }
-    .navlinks a:hover { color: var(--ink); }
+    .brand img { width: 24px; height: 24px; border-radius: 4px; }
+    .navlinks { display: flex; gap: 18px; font-size: 12.5px; }
+    .navlinks a { color: var(--ink-2); }
+    .navlinks a::before { content: "› "; color: var(--ink-3); }
+    .navlinks a:hover { color: var(--green); }
 
     /* legal */
     .legal {
-      background: #fafafa; color: var(--ink-2);
-      font-size: 12.5px; text-align: center;
+      background: var(--bg-1); color: var(--ink-2);
+      font-size: 12px; text-align: center;
       padding: 8px 24px; border-bottom: 1px solid var(--line);
     }
-    .legal a { color: var(--ink); border-bottom: 1px solid var(--ink); }
-
-    /* layout */
-    main { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+    .legal a { color: var(--yellow); }
+    .legal a::before { content: "[!] "; color: var(--yellow); }
 
     /* section */
-    section.chap { padding: 64px 0 56px; border-top: 1px solid var(--line); }
-    section.chap:first-of-type { border-top: none; padding-top: 80px; }
-    .chap-head {
-      display: grid; grid-template-columns: 56px 1fr; gap: 24px; align-items: start;
-      margin-bottom: 36px;
-    }
-    .chap-num {
-      font-family: "JetBrains Mono", monospace; font-size: 12px; color: var(--ink-3);
-      letter-spacing: .12em; padding-top: 6px;
-    }
-    .chap-title .zh { font-size: 24px; font-weight: 700; line-height: 1.3; }
-    .chap-title .en { margin-top: 4px; }
+    section.chap { padding: 56px 0 24px; }
+    .chap-num { font-size: 12px; color: var(--ink-3); letter-spacing: .12em; margin-bottom: 14px; }
+    .chap-num::before { content: "## "; color: var(--ink-3); }
 
-    /* hero */
-    .hero { padding: 88px 0 72px; max-width: 1120px; margin: 0 auto; }
-    .hero .chap-head { margin-bottom: 40px; }
+    /* HERO */
+    .hero { padding: 48px 0 24px; max-width: 1080px; margin: 0 auto; }
+    .hero .term-body { padding: 28px 28px 32px; }
     .hero h1 {
-      margin: 0; font-size: 44px; font-weight: 700; line-height: 1.2; letter-spacing: -.005em;
+      margin: 0; font-size: 28px; font-weight: 600; color: var(--ink); line-height: 1.3; letter-spacing: .005em;
     }
-    .hero .en-sub {
-      margin: 8px 0 24px;
-      font-family: "JetBrains Mono", monospace; font-size: 13px; color: var(--ink-3);
-      letter-spacing: .04em; line-height: 1.5;
-    }
-    .hero .lede { max-width: 720px; font-size: 15.5px; color: var(--ink-2); margin: 0 0 32px; }
+    .hero .tag { margin-top: 6px; }
+    .hero .lede { margin: 16px 0 24px; max-width: 720px; font-size: 13.5px; color: var(--ink-2); line-height: 1.75; }
+    .prompt-line { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; margin: 14px 0; font-size: 13.5px; }
+    .prompt-line .arrow { color: var(--ink-3); }
+    .prompt-line .arrow::before { content: "└─ "; color: var(--ink-3); }
 
-    .hero-grid { display: grid; grid-template-columns: 1fr 320px; gap: 56px; align-items: start; }
-    .cta { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .cta { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 6px; }
     .btn {
       display: inline-flex; align-items: center; gap: 10px;
-      padding: 12px 20px; min-height: 44px;
-      font-size: 14px; font-weight: 600;
-      border: 1px solid var(--ink);
+      padding: 10px 16px; min-height: 40px;
+      font-size: 13px; font-weight: 600;
+      border: 1px solid var(--line);
+      background: var(--bg-2);
+      color: var(--ink);
+      transition: border-color .12s ease, background .12s ease, color .12s ease;
     }
-    .btn.primary { background: var(--ink); color: #fff; }
-    .btn.ghost { background: #fff; color: var(--ink); }
-    .btn .arrow { font-family: "JetBrains Mono", monospace; }
-    .cta-note { font-family: "JetBrains Mono", monospace; font-size: 11.5px; color: var(--ink-3); letter-spacing: .06em; margin-top: 12px; }
+    .btn:hover { border-color: var(--green); }
+    .btn .bi .zh { color: var(--ink); font-size: 13px; }
+    .btn .bi .en { color: var(--ink-3); font-size: 10.5px; }
+    .btn.primary { background: var(--green); border-color: var(--green); color: #0a0a0a; }
+    .btn.primary .bi .zh { color: #0a0a0a; }
+    .btn.primary .bi .en { color: #0a0a0a; opacity: .7; }
+    .btn.primary:hover { background: #95ee9c; border-color: #95ee9c; }
+    .btn .arr { font-family: "JetBrains Mono", monospace; }
+    .cta-note { font-size: 11.5px; color: var(--ink-3); letter-spacing: .04em; margin-top: 14px; }
+    .cta-note::before { content: "$ echo "; color: var(--ink-3); }
 
-    .spec {
+    /* HERO 内 grid：左=主输出，右=信息表 */
+    .hero-grid { display: grid; grid-template-columns: 1fr 300px; gap: 18px; }
+    .info-table {
+      list-style: none; padding: 16px 18px; margin: 0;
+      border-left: 1px solid var(--line-soft);
+      font-size: 12.5px;
+    }
+    .info-table li { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 7px 0; }
+    .info-table li + li { border-top: 1px dashed var(--line-soft); }
+    .info-table .k { color: var(--ink-3); }
+    .info-table .v { color: var(--ink); font-family: "JetBrains Mono", monospace; font-size: 12px; }
+    .info-table .v.ok { color: var(--green); }
+    .info-table .v::before { content: "= "; color: var(--ink-3); }
+
+    /* 安装教程 */
+    .steps-term .term-body { padding: 0; }
+    .steps-term ol {
       list-style: none; padding: 0; margin: 0;
-      border-top: 1px solid var(--line);
+      counter-reset: step;
     }
-    .spec li {
-      display: flex; justify-content: space-between; align-items: baseline; gap: 16px;
-      padding: 10px 0; border-bottom: 1px solid var(--line-soft);
+    .steps-term li {
+      display: grid; grid-template-columns: 50px 1fr 50px; gap: 0; align-items: stretch;
+      border-bottom: 1px solid var(--line-soft);
     }
-    .spec .k { font-size: 13px; color: var(--ink-2); }
-    .spec .v { font-family: "JetBrains Mono", monospace; font-size: 12px; color: var(--ink-3); letter-spacing: .04em; }
-
-    /* steps */
-    .steps { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
-    .step { padding: 24px 20px 24px 0; border-right: 1px solid var(--line-soft); }
-    .step:last-child { border-right: none; padding-right: 0; }
-    .step + .step { padding-left: 20px; }
-    .step .num { font-family: "JetBrains Mono", monospace; font-size: 11.5px; color: var(--ink-3); letter-spacing: .12em; margin-bottom: 14px; }
-    .step h3 { margin: 0 0 4px; font-size: 15px; font-weight: 600; }
-    .step h3 .en { margin-top: 2px; }
-    .step p { margin: 10px 0 0; font-size: 13.5px; color: var(--ink-2); line-height: 1.65; }
-    .step code { font-family: "JetBrains Mono", monospace; font-size: 12px; background: #f5f5f5; padding: 1px 5px; }
-
-    /* tools */
-    .cat { margin-bottom: 28px; }
-    .cat:last-child { margin-bottom: 0; }
-    .cat-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 12px; }
-    .cat-head .zh { font-size: 16px; font-weight: 600; }
-    .cat-head .en { margin-top: 2px; text-align: right; }
-    .cat-head .count { font-family: "JetBrains Mono", monospace; font-size: 11.5px; color: var(--ink-3); letter-spacing: .12em; }
-
-    .cat-list { list-style: none; padding: 0; margin: 0; border-top: 1px solid var(--ink); }
-    .cat-list li { border-bottom: 1px solid var(--line); }
-    .cat-item {
-      display: grid; grid-template-columns: 40px 1.2fr 2fr 24px;
-      align-items: center; gap: 20px;
-      padding: 16px 8px;
+    .steps-term li:last-child { border-bottom: none; }
+    .steps-term .ln {
+      padding: 18px 14px 18px 18px; color: var(--ink-3); font-size: 11.5px;
+      border-right: 1px solid var(--line-soft);
+      text-align: right;
     }
-    .cat-item .i { font-family: "JetBrains Mono", monospace; font-size: 11.5px; color: var(--ink-3); letter-spacing: .1em; }
-    .cat-item .t .zh { font-size: 15px; font-weight: 600; }
-    .cat-item .t .en { margin-top: 1px; }
-    .cat-item .d { font-size: 13px; color: var(--ink-2); }
-    .cat-item .go { font-family: "JetBrains Mono", monospace; font-size: 14px; color: var(--ink-3); text-align: right; }
-    .cat-item:hover { background: #fafafa; }
-    .cat-item:hover .go { color: var(--ink); }
-    .cat-item.external .t .zh { font-style: normal; }
-    .cat-item.external .go::before { content: "↗"; }
+    .steps-term .body { padding: 16px 18px; }
+    .steps-term .body .prompt { display: flex; gap: 8px; align-items: baseline; font-size: 13.5px; }
+    .steps-term .body .desc { margin-top: 6px; font-size: 13px; color: var(--ink-2); line-height: 1.7; }
+    .steps-term .body .desc code {
+      font-family: "JetBrains Mono", monospace; font-size: 12px;
+      background: var(--bg-2); border: 1px solid var(--line); padding: 1px 6px; color: var(--cyan);
+    }
+    .steps-term .check { padding: 18px 14px; text-align: center; font-size: 14px; }
+    .steps-term .check.ok { color: var(--green); }
+    .steps-term .check::before { content: "✓"; }
+
+    /* 工具集合 */
+    .tools-term .term-body { padding: 0; }
+    .ls-list { list-style: none; padding: 0; margin: 0; }
+    .ls-list li { border-bottom: 1px solid var(--line-soft); }
+    .ls-list li:last-child { border-bottom: none; }
+    .ls-row {
+      display: grid; grid-template-columns: 36px 56px 1.3fr 1fr 28px;
+      align-items: center; gap: 14px;
+      padding: 12px 18px;
+      font-size: 13px;
+    }
+    .ls-row:hover { background: var(--bg-2); }
+    .ls-row .perm { color: var(--ink-3); font-size: 12px; }
+    .ls-row .size { color: var(--ink-3); font-size: 12px; font-family: "JetBrains Mono", monospace; }
+    .ls-row .idx { color: var(--ink-3); font-size: 12px; }
+    .ls-row .name { display: flex; flex-direction: column; gap: 1px; }
+    .ls-row .name .zh { font-family: "Source Han Mono SC", "Microsoft YaHei", "PingFang SC", sans-serif; font-size: 14px; font-weight: 600; color: var(--ink); }
+    .ls-row .name .en { font-family: "JetBrains Mono", monospace; font-size: 11px; color: var(--ink-3); letter-spacing: .06em; text-transform: uppercase; }
+    .ls-row .desc { color: var(--ink-2); font-size: 12.5px; }
+    .ls-row .arrow { color: var(--ink-3); font-family: "JetBrains Mono", monospace; text-align: right; }
+    .ls-row:hover .arrow { color: var(--green); }
+    .ls-row.dir .perm::before { content: "d"; color: var(--cyan); }
+    .ls-row.exe .perm::before { content: "-"; }
+    .ls-row .perm::before { content: "-"; color: var(--ink-3); }
+
+    .cat-divider {
+      padding: 10px 18px; background: var(--bg-2);
+      border-top: 1px solid var(--line); border-bottom: 1px solid var(--line-soft);
+      font-size: 12px; color: var(--ink-2);
+      display: flex; justify-content: space-between; align-items: baseline;
+    }
+    .cat-divider::before { content: "drwxr-xr-x  "; color: var(--ink-3); }
+    .cat-divider .name { color: var(--cyan); }
+    .cat-divider .name .en { color: var(--ink-3); margin-left: 8px; }
 
     /* footer */
-    footer { border-top: 1px solid var(--line); margin-top: 80px; padding: 32px 24px 40px; }
-    .foot { max-width: 1120px; margin: 0 auto; display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 40px; }
-    .foot .bi .zh { font-size: 13.5px; }
-    .foot p, .foot li { font-size: 13px; color: var(--ink-2); line-height: 1.7; margin: 0; }
-    .foot ul { list-style: none; padding: 0; margin: 8px 0 0; }
+    footer { padding: 48px 0 56px; margin-top: 40px; border-top: 1px solid var(--line); }
+    .foot {
+      max-width: 1080px; margin: 0 auto; padding: 0 24px;
+      display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 20px;
+    }
+    .foot .term-body { padding: 18px 20px 22px; }
+    .foot h4 { margin: 0 0 12px; font-size: 12px; color: var(--ink-2); font-weight: 500; letter-spacing: .04em; }
+    .foot h4::before { content: "## "; color: var(--ink-3); }
+    .foot p, .foot li { font-size: 12.5px; color: var(--ink-2); line-height: 1.7; margin: 0; }
+    .foot ul { list-style: none; padding: 0; margin: 0; }
     .foot li { padding: 2px 0; }
-    .foot a:hover { color: var(--ink); }
+    .foot li::before { content: "  "; }
+    .foot a { color: var(--cyan); }
+    .foot a:hover { color: var(--green); }
     .legal-mini {
-      max-width: 1120px; margin: 24px auto 0; padding-top: 16px;
-      border-top: 1px solid var(--line-soft);
+      max-width: 1080px; margin: 24px auto 0; padding: 0 24px;
       display: flex; justify-content: space-between; align-items: center;
-      font-family: "JetBrains Mono", monospace; font-size: 11.5px; color: var(--ink-3); letter-spacing: .04em;
+      font-size: 11.5px; color: var(--ink-3); letter-spacing: .04em;
     }
 
     /* responsive */
     @media (max-width: 880px) {
-      .nav { padding: 12px 20px; }
-      .navlinks { gap: 18px; }
-      main, .hero { padding-left: 20px; padding-right: 20px; }
-      .hero { padding-top: 56px; padding-bottom: 56px; }
-      .hero h1 { font-size: 32px; }
-      .hero-grid { grid-template-columns: 1fr; gap: 36px; }
-      .chap-head { grid-template-columns: 40px 1fr; gap: 16px; }
-      .chap-title .zh { font-size: 20px; }
-      .steps { grid-template-columns: 1fr 1fr; }
-      .step, .step:last-child { border-right: 1px solid var(--line-soft); border-bottom: 1px solid var(--line-soft); padding: 20px 16px; }
-      .step:nth-child(2n) { border-right: none; padding-right: 0; }
-      .step:nth-child(2n+1) { padding-left: 0; }
-      .step:nth-last-child(-n+2) { border-bottom: none; }
-      .cat-item { grid-template-columns: 32px 1fr 20px; gap: 12px; padding: 14px 4px; }
-      .cat-item .d { grid-column: 2; font-size: 12.5px; }
-      .foot { grid-template-columns: 1fr; gap: 24px; }
+      main, .hero, .foot, .legal-mini { padding-left: 16px; padding-right: 16px; }
+      .nav { padding: 10px 16px; }
+      .navlinks { gap: 14px; font-size: 12px; }
+      .hero { padding-top: 32px; }
+      .hero-grid { grid-template-columns: 1fr; }
+      .info-table { border-left: none; border-top: 1px solid var(--line-soft); }
+      .steps-term li { grid-template-columns: 32px 1fr 32px; }
+      .ls-row { grid-template-columns: 24px 1fr 24px; gap: 8px; padding: 10px 14px; }
+      .ls-row .perm, .ls-row .size { display: none; }
+      .ls-row .desc { grid-column: 2; font-size: 12px; }
+      .foot { grid-template-columns: 1fr; gap: 14px; }
+      .legal-mini { flex-direction: column; align-items: flex-start; gap: 6px; }
     }
     @media (max-width: 480px) {
       .navlinks { display: none; }
-      .steps { grid-template-columns: 1fr; }
-      .step, .step:last-child, .step:nth-child(2n), .step:nth-child(2n+1) {
-        border-right: none; border-bottom: 1px solid var(--line-soft);
-        padding: 18px 0;
-      }
-      .step:last-child { border-bottom: none; }
+      .hero h1 { font-size: 22px; }
     }
   </style>
 </head>
@@ -203,13 +276,13 @@
     <div class="nav">
       <a class="brand" href="#top">
         <img src="assets/icon128.png" alt="">
-        <span class="bi"><span class="zh">媒体下载器</span><span class="en">Media Downloader</span></span>
+        <span class="bi"><span class="zh">媒体下载器</span><span class="en">media-downloader</span></span>
       </a>
       <nav class="navlinks">
-        <a href="#download">下载</a>
-        <a href="#install">安装</a>
-        <a href="#tools">工具</a>
-        <a href="disclaimer.html">免责</a>
+        <a href="#download">下载 / download</a>
+        <a href="#install">安装 / setup</a>
+        <a href="#tools">工具 / tools</a>
+        <a href="disclaimer.html">免责 / disclaimer</a>
       </nav>
     </div>
   </header>
@@ -217,135 +290,164 @@
   <div class="legal" role="note">
     本工具仅供个人学习与备份使用，不破解 DRM、不绕过付费限制。请仅下载你本人有权访问和保存的内容。
     &nbsp;·&nbsp;
-    <a href="disclaimer.html">阅读完整免责声明 / Read Disclaimer</a>
+    <a href="disclaimer.html">阅读完整免责声明 / read disclaimer</a>
   </div>
 
   <main id="top">
     <!-- HERO -->
     <section class="hero">
-      <div class="chap-head">
-        <div class="chap-num">01</div>
-        <div class="chap-title bi">
-          <span class="zh">媒体下载器 免费下载</span>
-          <span class="en">Free Media Downloader — Chrome Extension</span>
+      <div class="term">
+        <div class="term-head">
+          <span class="term-dots"><i></i><i></i><i></i></span>
+          <span class="term-title">~/projects/media-downloader — zsh — 92×24</span>
+          <span class="c-dim">bash</span>
         </div>
-      </div>
-      <div class="hero-grid">
-        <div>
-          <p class="lede">媒体下载器 是一款给普通用户准备的 Chrome 扩展和本机下载工具。复制视频链接或分享文本，粘贴进去，文件就落到你自己的电脑上——不绕过付费、不破解 DRM，只保留你本来就有权保存的内容。</p>
-          <div class="cta" id="download">
-            <a class="btn primary" href="https://github.com/cy156906-glitch/XIAZAI/releases/download/v1.0.0/MediaDownloader-Windows.zip" download>
-              <span class="bi"><span class="zh" style="color:#fff;">下载 Windows 版</span><span class="en" style="color:#aaa;">Download for Windows</span></span>
-              <span class="arrow">↓</span>
-            </a>
-            <a class="btn ghost" href="#install">
-              <span class="bi"><span class="zh">安装教程</span><span class="en">Setup Guide</span></span>
-            </a>
+        <div class="term-body">
+          <div class="hero-grid">
+            <div>
+              <div class="prompt-line"><span><span class="p-user">➜</span> <span class="p-host">~</span> <span class="c-dim">git:(</span><span class="c-acc">main</span><span class="c-dim">)</span></span> <span>media-downloader --version</span></div>
+              <h1 style="margin-top:6px;">媒体下载器 免费下载 <span class="c-ok">v1.0.0</span></h1>
+              <p class="tag c-dim">FREE MEDIA DOWNLOADER · CHROME EXTENSION · CLI TOOL</p>
+              <p class="lede">媒体下载器 是一款给普通用户准备的 Chrome 扩展和本机下载工具。复制视频链接或分享文本，粘贴进去，文件就落到你自己的电脑上——不绕过付费、不破解 DRM，只保留你本来就有权保存的内容。</p>
+
+              <div class="prompt-line"><span><span class="p-user">➜</span> <span class="p-host">~</span></span> <span>media-downloader install --windows</span></div>
+              <div class="prompt-line"><span class="c-dim">→</span> <span class="c-info">resolving</span> <span class="c-dim">...</span> <span class="c-ok">ready</span> <span class="c-dim">·</span> <span class="c-info">12 MB</span> <span class="c-dim">·</span> <span class="c-warn">no DRM bypass</span></div>
+
+              <div class="cta" id="download">
+                <a class="btn primary" href="https://github.com/cy156906-glitch/XIAZAI/releases/download/v1.0.0/MediaDownloader-Windows.zip" download>
+                  <span class="bi"><span class="zh">下载 Windows 版</span><span class="en">download for windows</span></span>
+                  <span class="arr">↓</span>
+                </a>
+                <a class="btn" href="#install">
+                  <span class="bi"><span class="zh">查看安装教程</span><span class="en">setup guide</span></span>
+                  <span class="arr">→</span>
+                </a>
+              </div>
+              <p class="cta-note">sha256: a1b2c3… · windows zip · v1.0.0</p>
+            </div>
+
+            <ul class="info-table">
+              <li><span class="k">platform</span><span class="v ok">ready</span></li>
+              <li><span class="k">license</span><span class="v">free · mit-style</span></li>
+              <li><span class="k">runtime</span><span class="v">100% local</span></li>
+              <li><span class="k">size</span><span class="v">~ 12 mb</span></li>
+              <li><span class="k">sources</span><span class="v">5 platforms</span></li>
+              <li><span class="k">node</span><span class="v">v20+</span></li>
+            </ul>
           </div>
-          <p class="cta-note">SHA-256 · WINDOWS ZIP · v1.0.0</p>
         </div>
-        <ul class="spec">
-          <li><span class="k">平台 / Platform</span><span class="v">Chrome / Edge / Win</span></li>
-          <li><span class="k">许可 / License</span><span class="v">Free</span></li>
-          <li><span class="k">运行 / Runtime</span><span class="v">100% 本机 · Local</span></li>
-          <li><span class="k">大小 / Size</span><span class="v">~ 12 MB</span></li>
-        </ul>
       </div>
     </section>
 
     <!-- INSTALL -->
     <section class="chap" id="install">
-      <div class="chap-head">
-        <div class="chap-num">02</div>
-        <div class="chap-title bi">
-          <span class="zh">安装教程</span>
-          <span class="en">Setup — 4 steps, 1 minute</span>
+      <div class="chap-num">02 / setup — 4 steps, 1 minute</div>
+      <div class="term steps-term">
+        <div class="term-head">
+          <span class="term-dots"><i></i><i></i><i></i></span>
+          <span class="term-title">setup.sh — bash — 80×24</span>
+          <span class="c-dim">executable</span>
+        </div>
+        <ol>
+          <li>
+            <div class="ln">01</div>
+            <div class="body">
+              <div class="prompt"><span class="p-user">$</span> <span>unzip MediaDownloader-Windows.zip</span></div>
+              <p class="desc">下载并解压工具 ZIP 到任意目录，记下路径。 <code>unzip</code> 或右键 → 解压到当前文件夹。</p>
+            </div>
+            <div class="check ok"></div>
+          </li>
+          <li>
+            <div class="ln">02</div>
+            <div class="body">
+              <div class="prompt"><span class="p-user">$</span> <span>open <span class="c-info">chrome://extensions/</span> --dev-mode <span class="c-ok">on</span></span></div>
+              <p class="desc">打开浏览器（推荐 Chrome），地址栏输入 <code>chrome://extensions/</code>，打开右上角<strong>开发者模式</strong>。</p>
+            </div>
+            <div class="check ok"></div>
+          </li>
+          <li>
+            <div class="ln">03</div>
+            <div class="body">
+              <div class="prompt"><span class="p-user">$</span> <span>drag <span class="c-path">./extension</span> → extensions-page</span></div>
+              <p class="desc">在解压后的文件夹里找到 <code>extension</code> 目录，<strong>整个文件夹</strong>直接拖到扩展页面，扩展会自动加载。</p>
+            </div>
+            <div class="check ok"></div>
+          </li>
+          <li>
+            <div class="ln">04</div>
+            <div class="body">
+              <div class="prompt"><span class="p-user">$</span> <span>pin <span class="c-warn">"媒体下载器"</span> --to toolbar</span></div>
+              <p class="desc">点击工具栏拼图图标 → 找到「媒体下载器」→ 点击「固定」置顶，工具栏上即可一键打开。</p>
+            </div>
+            <div class="check ok"></div>
+          </li>
+        </ol>
+        <div class="term-body" style="border-top:1px solid var(--line); background:var(--bg-2); padding:10px 18px; font-size:12px;">
+          <span class="p-user">$</span> <span>setup --status</span>
+          <span class="c-dim">  </span>
+          <span class="c-ok">done</span>
+          <span class="c-dim"> · extension loaded · pinned</span>
         </div>
       </div>
-      <ol class="steps">
-        <li class="step">
-          <div class="num">01</div>
-          <h3 class="bi"><span class="zh">解压文件</span><span class="en">Unzip</span></h3>
-          <p>下载并解压工具 ZIP 到任意目录，记下路径。</p>
-        </li>
-        <li class="step">
-          <div class="num">02</div>
-          <h3 class="bi"><span class="zh">打开扩展页</span><span class="en">Open extensions</span></h3>
-          <p>浏览器（推荐 Chrome）地址栏输入 <code>chrome://extensions/</code>，打开右上角<strong>开发者模式</strong>。</p>
-        </li>
-        <li class="step">
-          <div class="num">03</div>
-          <h3 class="bi"><span class="zh">拖入 extension</span><span class="en">Drag &amp; drop</span></h3>
-          <p>在解压后的文件夹里找到 <code>extension</code> 目录，<strong>整个文件夹</strong>直接拖到扩展页面，扩展会自动加载。</p>
-        </li>
-        <li class="step">
-          <div class="num">04</div>
-          <h3 class="bi"><span class="zh">置顶图标</span><span class="en">Pin icon</span></h3>
-          <p>点击工具栏拼图图标 → 找到「媒体下载器」→ 点击「固定」置顶，工具栏上即可一键打开。</p>
-        </li>
-      </ol>
     </section>
 
     <!-- TOOLS -->
     <section class="chap" id="tools">
-      <div class="chap-head">
-        <div class="chap-num">03</div>
-        <div class="chap-title bi">
-          <span class="zh">工具集合</span>
-          <span class="en">Catalogue — Media + Desktop</span>
+      <div class="chap-num">03 / catalogue — media + desktop</div>
+      <div class="term tools-term">
+        <div class="term-head">
+          <span class="term-dots"><i></i><i></i><i></i></span>
+          <span class="term-title">tools/ — zsh — ls -lah</span>
+          <span class="c-dim">directory</span>
         </div>
-      </div>
 
-      <div class="cat">
-        <div class="cat-head">
-          <span class="bi"><span class="zh">媒体工具</span><span class="en">Media tools</span></span>
-          <span class="count">05 ITEMS</span>
+        <div class="cat-divider">
+          <span><span class="c-ok">→</span> <span class="name">media/ <span class="en">media tools · 05 items</span></span></span>
+          <span class="c-dim">05 ITEMS</span>
         </div>
-        <ul class="cat-list">
-          <li><a class="cat-item" href="douyin-video-downloader.html">
-            <span class="i">01</span>
-            <span class="t bi"><span class="zh">抖音视频下载器</span><span class="en">Douyin downloader</span></span>
-            <span class="d">复制抖音链接或分享文本，粘贴到扩展里提交下载。</span>
-            <span class="go">→</span>
+        <ul class="ls-list">
+          <li><a class="ls-row" href="douyin-video-downloader.html">
+            <span class="idx">01</span><span class="perm">rwxr-xr-x</span>
+            <span class="name"><span class="zh">抖音视频下载器</span><span class="en">douyin-downloader</span></span>
+            <span class="desc">复制抖音链接或分享文本，粘贴到扩展里提交下载。</span>
+            <span class="arrow">→</span>
           </a></li>
-          <li><a class="cat-item" href="bilibili-video-downloader.html">
-            <span class="i">02</span>
-            <span class="t bi"><span class="zh">B 站视频下载器</span><span class="en">Bilibili downloader</span></span>
-            <span class="d">支持哔哩哔哩和 b23.tv 短链，登录态下保留清晰度。</span>
-            <span class="go">→</span>
+          <li><a class="ls-row" href="bilibili-video-downloader.html">
+            <span class="idx">02</span><span class="perm">rwxr-xr-x</span>
+            <span class="name"><span class="zh">B 站视频下载器</span><span class="en">bilibili-downloader</span></span>
+            <span class="desc">支持哔哩哔哩和 b23.tv 短链，登录态下保留清晰度。</span>
+            <span class="arrow">→</span>
           </a></li>
-          <li><a class="cat-item" href="xiaohongshu-video-downloader.html">
-            <span class="i">03</span>
-            <span class="t bi"><span class="zh">小红书视频下载</span><span class="en">Xiaohongshu downloader</span></span>
-            <span class="d">支持小红书笔记链接和分享文本，自动识别图文/视频。</span>
-            <span class="go">→</span>
+          <li><a class="ls-row" href="xiaohongshu-video-downloader.html">
+            <span class="idx">03</span><span class="perm">rwxr-xr-x</span>
+            <span class="name"><span class="zh">小红书视频下载</span><span class="en">xiaohongshu-downloader</span></span>
+            <span class="desc">支持小红书笔记链接和分享文本，自动识别图文/视频。</span>
+            <span class="arrow">→</span>
           </a></li>
-          <li><a class="cat-item" href="youtube-video-downloader.html">
-            <span class="i">04</span>
-            <span class="t bi"><span class="zh">YouTube 下载工具</span><span class="en">YouTube downloader</span></span>
-            <span class="d">适合备份你本人有权保存的视频内容。</span>
-            <span class="go">→</span>
+          <li><a class="ls-row" href="youtube-video-downloader.html">
+            <span class="idx">04</span><span class="perm">rwxr-xr-x</span>
+            <span class="name"><span class="zh">YouTube 下载工具</span><span class="en">youtube-downloader</span></span>
+            <span class="desc">适合备份你本人有权保存的视频内容。</span>
+            <span class="arrow">→</span>
           </a></li>
-          <li><a class="cat-item" href="chrome-extension-media-downloader.html">
-            <span class="i">05</span>
-            <span class="t bi"><span class="zh">Chrome 媒体下载扩展</span><span class="en">Chrome extension</span></span>
-            <span class="d">扩展 + 本地服务，文件直接保存到你的电脑。</span>
-            <span class="go">→</span>
+          <li><a class="ls-row" href="chrome-extension-media-downloader.html">
+            <span class="idx">05</span><span class="perm">rwxr-xr-x</span>
+            <span class="name"><span class="zh">Chrome 媒体下载扩展</span><span class="en">chrome-extension</span></span>
+            <span class="desc">扩展 + 本机服务，文件直接保存到你的电脑。</span>
+            <span class="arrow">→</span>
           </a></li>
         </ul>
-      </div>
 
-      <div class="cat">
-        <div class="cat-head">
-          <span class="bi"><span class="zh">桌面工具</span><span class="en">Desktop tools</span></span>
-          <span class="count">01 ITEM</span>
+        <div class="cat-divider">
+          <span><span class="c-ok">→</span> <span class="name">desktop/ <span class="en">desktop tools · 01 item</span></span></span>
+          <span class="c-dim">01 ITEM</span>
         </div>
-        <ul class="cat-list">
-          <li><a class="cat-item external" href="https://cy156906-glitch.github.io/heidong/" rel="noopener">
-            <span class="i">06</span>
-            <span class="t bi"><span class="zh">桌面黑洞屏保</span><span class="en">Black-hole screensaver</span></span>
-            <span class="d">独立项目 heidong。Windows 黑洞可视化屏保，空闲显示 / 看视频自动隐藏，14 个参数可调。</span>
-            <span class="go"></span>
+        <ul class="ls-list">
+          <li><a class="ls-row" href="https://cy156906-glitch.github.io/heidong/" rel="noopener">
+            <span class="idx">06</span><span class="perm">rwxr-xr-x</span>
+            <span class="name"><span class="zh">桌面黑洞屏保</span><span class="en">blackhole-screensaver</span></span>
+            <span class="desc">独立项目 heidong。Windows 黑洞可视化屏保，空闲显示 / 看视频自动隐藏，14 个参数可调。</span>
+            <span class="arrow">↗</span>
           </a></li>
         </ul>
       </div>
@@ -354,32 +456,38 @@
 
   <footer>
     <div class="foot">
-      <div>
-        <span class="bi"><span class="zh">关于</span><span class="en">About</span></span>
-        <p>媒体下载器 是一个个人维护的免费工具集。所有下载都在本机完成，工具不存储、不上传任何用户数据。</p>
+      <div class="term">
+        <div class="term-body">
+          <h4>about</h4>
+          <p>$ <span class="c-info">cat</span> README.md<br>媒体下载器 是一个个人维护的免费工具集。所有下载都在本机完成，工具不存储、不上传任何用户数据。</p>
+        </div>
       </div>
-      <div>
-        <span class="bi"><span class="zh">链接</span><span class="en">Links</span></span>
-        <ul>
-          <li><a href="#download">下载 / Download</a></li>
-          <li><a href="#install">安装 / Setup</a></li>
-          <li><a href="#tools">工具 / Catalogue</a></li>
-          <li><a href="disclaimer.html">免责声明 / Disclaimer</a></li>
-        </ul>
+      <div class="term">
+        <div class="term-body">
+          <h4>links</h4>
+          <ul>
+            <li><a href="#download">下载 / download</a></li>
+            <li><a href="#install">安装 / setup</a></li>
+            <li><a href="#tools">工具 / tools</a></li>
+            <li><a href="disclaimer.html">免责声明 / disclaimer</a></li>
+          </ul>
+        </div>
       </div>
-      <div>
-        <span class="bi"><span class="zh">合规</span><span class="en">Compliance</span></span>
-        <ul>
-          <li>不破解 DRM / No DRM bypass</li>
-          <li>不绕过付费 / No paywall bypass</li>
-          <li>不存储数据 / No data stored</li>
-          <li>仅供个人备份 / Personal use only</li>
-        </ul>
+      <div class="term">
+        <div class="term-body">
+          <h4>compliance</h4>
+          <ul>
+            <li><span class="c-ok">✓</span> 不破解 DRM / no DRM bypass</li>
+            <li><span class="c-ok">✓</span> 不绕过付费 / no paywall bypass</li>
+            <li><span class="c-ok">✓</span> 不存储数据 / no data stored</li>
+            <li><span class="c-warn">!</span> 仅供个人备份 / personal use only</li>
+          </ul>
+        </div>
       </div>
     </div>
     <div class="legal-mini">
-      <span>© 2026 媒体下载器 · Made for personal backup</span>
-      <span><a href="disclaimer.html">Disclaimer</a></span>
+      <span>$ exit — © 2026 media-downloader · made for personal backup</span>
+      <span><a href="disclaimer.html">disclaimer</a></span>
     </div>
   </footer>
 </body>
