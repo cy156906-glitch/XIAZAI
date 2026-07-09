@@ -41,6 +41,7 @@ This tool does not break DRM or bypass paid restrictions. Please only download c
 
 ## Changelog
 
+- v1.0.3: Collapsible "下载列表" panel with multi-task support. Popup can be closed mid-download — tasks continue on the local service and reappear when the popup is reopened. More specific error messages when the local service is offline. Fixed two rare install bugs (cmd parser in paths with parentheses, and PowerShell-launched child processes being killed when the parent exits).
 - v1.0.2: Launcher now silent (no black window). Added one-time auto-start installer and uninstaller. The extension always works after `安装开机自启.bat` is run once.
 - v1.0.1: Bundled portable Python 3.11 inside the package. No Python install needed.
 - v1.0.0: First public release.
