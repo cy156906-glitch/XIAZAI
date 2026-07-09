@@ -15,9 +15,46 @@
   <p class="muted">这是一个免费 Chrome 扩展和 Windows 本地下载器组合。扩展负责读取链接和登录状态，本地服务负责解析并下载文件。</p>
   <a class="btn" href="https://github.com/cy156906-glitch/XIAZAI/releases/download/v1.0.0/MediaDownloader-Windows.zip">下载 Windows 版</a>
   <div class="legal">本工具仅供个人学习与备份使用，不破解 DRM、不绕过付费限制。请仅下载你本人有权访问和保存的内容。<a href="disclaimer.html">阅读完整免责声明 &rarr;</a></div>
-  <h2>安装方法</h2>
-  <ol><li>下载并解压工具包。</li><li>在 Chrome 地址栏输入 <code>chrome://extensions/</code>，打开右上角"开发者模式"。</li><li>把解压文件夹里的 <code>extension</code> 整个文件夹拖入扩展页面。</li><li>点击浏览器右上角拼图图标，把"媒体下载器"固定到工具栏。</li></ol>
-  <p class="note">请仅用于合法备份和保存你有权访问的内容。</p>
+  <h2>安装方法（约 2 分钟）</h2>
+  <ol>
+    <li>下载并解压工具包到任意位置（例如桌面）。</li>
+    <li>进入解压后的文件夹，<b>双击 <code>安装开机自启.bat</code></b>。这个脚本会做两件事：把本地服务注册为 Windows 开机自启，并且立刻启动它（无黑窗、后台运行）。只需要这一次，以后每次开机服务都会自动起来。</li>
+    <li>在 Chrome 地址栏输入 <code>chrome://extensions/</code>，打开右上角"开发者模式"。</li>
+    <li>点击"加载已解压的扩展程序"，选择解压文件夹里的 <code>extension</code> 文件夹。</li>
+    <li>点击浏览器右上角拼图图标，把"媒体下载器"固定到工具栏，方便以后用。</li>
+  </ol>
+
+  <h2>使用流程</h2>
+  <ol>
+    <li>在 Chrome 里正常登录你要下载的平台（抖音、B站、小红书、YouTube 等），播放任意视频让登录状态生效。</li>
+    <li>复制视频页面链接或分享文本。</li>
+    <li>点击工具栏的"媒体下载器"扩展图标，把链接粘进去，点击"下载"。</li>
+    <li>文件默认保存到桌面的 <code>MediaDownloads</code> 文件夹。下载完成后点绿色的"已下载到"提示可直接打开。</li>
+  </ol>
+
+  <h2>常见问题</h2>
+  <p><b>扩展提示"本地服务未启动，请先双击运行 YOUTUBE下载器.bat"</b><br>
+  说明服务没在跑。双击解压文件夹里的 <code>YOUTUBE下载器.bat</code>（无黑窗，瞬间就关），服务会在后台启动。常见原因：注册表自启被杀毒软件清掉、电脑长时间没重启、或者第 2 步跳过了。</p>
+  <p><b>下载某个平台失败</b><br>
+  先确认 Chrome 里已经登录该平台并能正常播放该视频。再不行，把链接直接粘到扩展里重试一次。</p>
+  <p><b>抖音提示 Cookie 或登录错误</b><br>
+  打开 <a href="https://www.douyin.com/">douyin.com</a>，播放任意视频几秒钟让 Cookie 生效，然后回扩展重试。</p>
+  <p><b>受 DRM、会员、地区或作者限制的内容无法下载</b><br>
+  本工具不破解 DRM、不绕过付费限制，请仅下载你有合法权限保存的内容。</p>
+
+  <h2>包内文件说明</h2>
+  <ul>
+    <li><code>安装开机自启.bat</code> &mdash; 双击一次，注册 Windows 开机自启并启动服务。</li>
+    <li><code>YOUTUBE下载器.bat</code> &mdash; 手动启动服务（备用）。</li>
+    <li><code>卸载开机自启.bat</code> &mdash; 取消开机自启并停止服务。</li>
+    <li><code>extension/</code> &mdash; Chrome 扩展源文件。</li>
+    <li><code>python/</code> &mdash; 内置 Python 3.11 + 13 个预装依赖，免装 Python。</li>
+    <li><code>yt-dlp.exe</code>、<code>ffmpeg.exe</code> &mdash; 下载与转码工具。</li>
+    <li><code>server.py</code> &mdash; 本地下载服务主程序。</li>
+    <li><code>使用说明.txt</code> &mdash; 离线版完整说明。</li>
+  </ul>
+
+  <p class="note">提示：建议把整个解压文件夹放在一个固定位置（例如 <code>D:\Tools\MediaDownloader</code>），不要放在桌面或下载文件夹里，避免被清理工具误删。</p>
 </article>
 <p class="footer"><a href="./">返回首页</a> &nbsp;|&nbsp; <a href="disclaimer.html">免责声明</a></p>
 </main></body></html>
