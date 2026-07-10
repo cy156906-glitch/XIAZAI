@@ -3,212 +3,784 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>媒体下载器 — 免费 Chrome 扩展</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2218%22 fill=%22%23e62117%22/><text x=%2250%22 y=%2268%22 text-anchor=%22middle%22 font-size=%2256%22 font-weight=%22800%22 fill=%22white%22 font-family=%22sans-serif%22>下</text></svg>">
+  <title>Snap Download — 免费在线视频下载</title>
+  <meta name="description" content="粘贴视频链接，免费下载 YouTube、B站、抖音、小红书、网易云音乐、X (Twitter)、Envato 等平台的视频和音频。无需注册、无水印。">
+  <meta name="keywords" content="视频下载, YouTube下载, B站下载, 抖音下载, 小红书下载, 在线下载, 免费">
+  <meta property="og:title" content="Snap Download — 免费在线视频下载">
+  <meta property="og:description" content="粘贴视频链接，免费下载主流平台的视频和音频。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://xiazai-2026.pages.dev/">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%230f0f0f%22/><path d=%22M30 30 L70 30 L70 50 L55 50 L55 70 L45 70 L45 50 L30 50 Z%22 fill=%22white%22/></svg>">
   <style>
-    * { box-sizing: border-box; }
+    *, *::before, *::after { box-sizing: border-box; }
+    :root {
+      --bg: #fafafa;
+      --bg-elev: #ffffff;
+      --ink: #0f0f0f;
+      --ink-2: #5b5b5b;
+      --ink-3: #9a9a9a;
+      --line: #ececec;
+      --line-2: #d8d8d8;
+      --accent: #0f0f0f;
+      --accent-ink: #ffffff;
+      --ok: #0a7d3b;
+      --err: #c2352b;
+      --radius: 14px;
+    }
     body {
       margin: 0;
       min-height: 100vh;
-      font-family: "PingFang SC", "Microsoft YaHei", "Segoe UI", Arial, sans-serif;
-      background: radial-gradient(ellipse at top, #1a1a2e 0%, #0a0a14 60%, #000 100%);
-      color: #f4f4f4;
+      font-family: "Inter", "PingFang SC", "Microsoft YaHei", "Segoe UI", system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    a { color: inherit; }
+
+    /* ---------- Header ---------- */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(250, 250, 250, 0.85);
+      backdrop-filter: saturate(180%) blur(14px);
+      -webkit-backdrop-filter: saturate(180%) blur(14px);
+      border-bottom: 1px solid var(--line);
+    }
+    .nav {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 14px 22px;
       display: flex;
       align-items: center;
-      justify-content: center;
-      padding: 32px 16px;
+      justify-content: space-between;
+      gap: 18px;
     }
-    main {
-      max-width: 720px;
-      width: 100%;
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 16px;
+      letter-spacing: -0.01em;
+      text-decoration: none;
+      color: var(--ink);
+    }
+    .brand-mark {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: var(--ink);
+      display: grid;
+      place-items: center;
+    }
+    .brand-mark svg { width: 14px; height: 14px; }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      font-size: 14px;
+      color: var(--ink-2);
+    }
+    .nav-links a {
+      text-decoration: none;
+      color: var(--ink-2);
+      transition: color 0.15s;
+    }
+    .nav-links a:hover { color: var(--ink); }
+    .nav-cta {
+      padding: 8px 14px;
+      background: var(--ink);
+      color: var(--accent-ink);
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      transition: opacity 0.15s;
+    }
+    .nav-cta:hover { opacity: 0.85; }
+
+    /* ---------- Hero ---------- */
+    .hero {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 64px 22px 32px;
       text-align: center;
     }
-    .logo {
-      display: inline-grid;
-      place-items: center;
-      width: 84px;
-      height: 84px;
-      border-radius: 22px;
-      background: linear-gradient(135deg, #ff2a2a 0%, #e62117 100%);
-      color: #fff;
-      font-weight: 800;
-      font-size: 30px;
-      box-shadow: 0 12px 30px rgba(230, 33, 23, 0.4);
-      margin-bottom: 22px;
-    }
-    h1 {
-      margin: 0 0 12px;
-      font-size: 38px;
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      background: linear-gradient(90deg, #fff 0%, #ccc 100%);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-    }
-    .sub {
-      color: #aaa;
-      font-size: 16px;
-      margin: 0 0 32px;
-    }
-    .platforms {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 8px;
-      margin-bottom: 36px;
-    }
-    .chip {
-      padding: 6px 12px;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      color: #ccc;
-      font-size: 13px;
-    }
-    .download {
+    .hero-tag {
       display: inline-flex;
       align-items: center;
-      gap: 12px;
-      padding: 18px 36px;
-      font-size: 18px;
-      font-weight: 800;
-      color: #fff;
-      background: linear-gradient(135deg, #ff2a2a 0%, #e62117 100%);
+      gap: 6px;
+      padding: 5px 12px;
+      border: 1px solid var(--line-2);
+      border-radius: 999px;
+      font-size: 12px;
+      color: var(--ink-2);
+      margin-bottom: 22px;
+    }
+    .hero-tag .dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--ok);
+      box-shadow: 0 0 0 3px rgba(10, 125, 59, 0.12);
+    }
+    h1 {
+      margin: 0 0 14px;
+      font-size: clamp(36px, 6vw, 52px);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+    }
+    .hero-sub {
+      color: var(--ink-2);
+      font-size: 17px;
+      line-height: 1.55;
+      margin: 0 0 36px;
+    }
+
+    /* ---------- Input ---------- */
+    .input-wrap {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 0 22px;
+    }
+    .input-box {
+      display: flex;
+      align-items: stretch;
+      background: var(--bg-elev);
+      border: 1px solid var(--line-2);
+      border-radius: var(--radius);
+      padding: 6px 6px 6px 18px;
+      box-shadow: 0 1px 0 rgba(0,0,0,0.02), 0 6px 20px rgba(0,0,0,0.04);
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .input-box:focus-within {
+      border-color: var(--ink);
+      box-shadow: 0 0 0 4px rgba(0,0,0,0.06);
+    }
+    .input-box input {
+      flex: 1;
       border: 0;
-      border-radius: 14px;
+      outline: 0;
+      background: transparent;
+      font: inherit;
+      font-size: 15px;
+      color: var(--ink);
+      padding: 14px 6px;
+      min-width: 0;
+    }
+    .input-box input::placeholder { color: var(--ink-3); }
+    .input-box button {
+      border: 0;
+      background: var(--ink);
+      color: var(--accent-ink);
+      font: inherit;
+      font-size: 14px;
+      font-weight: 500;
+      padding: 0 22px;
+      border-radius: 10px;
       cursor: pointer;
-      text-decoration: none;
-      box-shadow: 0 14px 40px rgba(230, 33, 23, 0.45);
-      transition: transform .15s ease, box-shadow .15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: opacity 0.15s;
     }
-    .download:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 20px 50px rgba(230, 33, 23, 0.55);
-    }
-    .download:active { transform: translateY(0); }
-    .download-meta {
+    .input-box button:hover { opacity: 0.88; }
+    .input-box button:disabled { opacity: 0.4; cursor: not-allowed; }
+    .input-tools {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       margin-top: 14px;
-      color: #888;
-      font-size: 13px;
+      padding: 0 4px;
+      font-size: 12px;
+      color: var(--ink-3);
     }
-    .download-meta code {
-      background: rgba(255, 255, 255, 0.06);
-      padding: 2px 6px;
-      border-radius: 4px;
-      color: #ccc;
+    .input-tools .paste {
+      cursor: pointer;
+      color: var(--ink-2);
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      user-select: none;
     }
-    .features {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 16px;
-      margin-top: 48px;
+    .input-tools .paste:hover { color: var(--ink); }
+
+    .hint {
+      max-width: 720px;
+      margin: 8px auto 0;
+      padding: 0 26px;
+      font-size: 12px;
+      color: var(--ink-3);
       text-align: left;
     }
-    .feature {
-      padding: 20px;
-      border-radius: 14px;
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.07);
+
+    /* ---------- Status ---------- */
+    .status {
+      max-width: 720px;
+      margin: 28px auto 0;
+      padding: 0 22px;
     }
-    .feature h3 {
-      margin: 0 0 8px;
-      font-size: 15px;
-      color: #fff;
-    }
-    .feature p {
-      margin: 0;
-      font-size: 13px;
-      line-height: 1.6;
-      color: #aaa;
-    }
-    .feature .ico {
-      font-size: 22px;
-      margin-bottom: 10px;
-    }
-    .links {
-      margin-top: 40px;
+    .status-card {
+      background: var(--bg-elev);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 18px 20px;
       display: flex;
-      justify-content: center;
-      gap: 18px;
-      flex-wrap: wrap;
+      gap: 14px;
+      align-items: center;
+      font-size: 14px;
+      color: var(--ink-2);
     }
-    .links a {
-      color: #888;
+    .spinner {
+      width: 18px; height: 18px;
+      border: 2px solid var(--line-2);
+      border-top-color: var(--ink);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      flex-shrink: 0;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .status.error {
+      border-color: rgba(194, 53, 43, 0.2);
+      background: rgba(194, 53, 43, 0.04);
+      color: var(--err);
+    }
+    .status.error .spinner { display: none; }
+
+    /* ---------- Result ---------- */
+    .result {
+      max-width: 920px;
+      margin: 36px auto 0;
+      padding: 0 22px;
+      display: none;
+    }
+    .result.show { display: block; }
+    .result-grid {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 24px;
+    }
+    @media (max-width: 720px) {
+      .result-grid { grid-template-columns: 1fr; }
+    }
+    .thumb {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: #eee;
+      border-radius: var(--radius);
+      overflow: hidden;
+      position: relative;
+    }
+    .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .thumb .duration {
+      position: absolute;
+      right: 8px; bottom: 8px;
+      background: rgba(0,0,0,0.78);
+      color: #fff;
+      font-size: 12px;
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-variant-numeric: tabular-nums;
+    }
+    .info h2 {
+      margin: 0 0 6px;
+      font-size: 18px;
+      font-weight: 600;
+      line-height: 1.35;
+      letter-spacing: -0.01em;
+    }
+    .info .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px 12px;
+      color: var(--ink-2);
+      font-size: 13px;
+      margin-bottom: 18px;
+    }
+    .info .meta .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 9px;
+      background: #f0f0f0;
+      border-radius: 6px;
+      font-size: 12px;
+      color: var(--ink);
+    }
+    .section-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--ink-3);
+      font-weight: 600;
+      margin: 0 0 10px;
+    }
+    .format-list { display: grid; gap: 8px; }
+    .format {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 14px;
+      background: var(--bg-elev);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      transition: border-color 0.15s, transform 0.1s;
+    }
+    .format:hover { border-color: var(--ink); }
+    .format-info {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-width: 0;
+    }
+    .format-icon {
+      width: 38px; height: 38px;
+      background: #f4f4f4;
+      border-radius: 8px;
+      display: grid; place-items: center;
+      flex-shrink: 0;
+      color: var(--ink-2);
+    }
+    .format-icon svg { width: 18px; height: 18px; }
+    .format-text { min-width: 0; }
+    .format-text .name { font-size: 14px; font-weight: 500; }
+    .format-text .desc { font-size: 12px; color: var(--ink-3); margin-top: 2px; }
+    .format-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      background: var(--ink);
+      color: var(--accent-ink);
+      border-radius: 8px;
       text-decoration: none;
       font-size: 13px;
-      transition: color .15s ease;
+      font-weight: 500;
+      cursor: pointer;
+      border: 0;
+      font-family: inherit;
+      transition: opacity 0.15s;
+      white-space: nowrap;
     }
-    .links a:hover { color: #fff; }
-    .foot {
-      margin-top: 48px;
-      color: #555;
+    .format-btn:hover { opacity: 0.88; }
+    .format-btn.secondary {
+      background: transparent;
+      color: var(--ink);
+      border: 1px solid var(--line-2);
+    }
+    .format-btn.secondary:hover { border-color: var(--ink); }
+
+    /* ---------- Platforms strip ---------- */
+    .platforms {
+      max-width: 920px;
+      margin: 56px auto 0;
+      padding: 28px 22px;
+      border-top: 1px solid var(--line);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 18px;
+      align-items: center;
+      justify-content: center;
+      color: var(--ink-2);
+      font-size: 13px;
+    }
+    .platforms .label { color: var(--ink-3); margin-right: 4px; }
+    .platforms .pill {
+      padding: 4px 10px;
+      border: 1px solid var(--line-2);
+      border-radius: 999px;
       font-size: 12px;
-      line-height: 1.6;
+      color: var(--ink-2);
     }
-    @media (max-width: 480px) {
-      h1 { font-size: 28px; }
-      .download { padding: 16px 28px; font-size: 16px; }
+
+    /* ---------- Footer ---------- */
+    footer {
+      max-width: 1080px;
+      margin: 24px auto 0;
+      padding: 22px;
+      border-top: 1px solid var(--line);
+      text-align: center;
+      color: var(--ink-3);
+      font-size: 12px;
     }
+    footer a { color: var(--ink-2); text-decoration: none; margin: 0 8px; }
+    footer a:hover { color: var(--ink); }
+
+    /* ---------- Utility ---------- */
+    .row-tabs { display: flex; gap: 6px; margin-bottom: 10px; }
+    .row-tabs button {
+      font: inherit;
+      font-size: 12px;
+      padding: 5px 11px;
+      border: 1px solid var(--line-2);
+      background: transparent;
+      color: var(--ink-2);
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .row-tabs button.on { background: var(--ink); color: var(--accent-ink); border-color: var(--ink); }
+
+    .scroll-fade { transition: opacity 0.2s; }
   </style>
 </head>
 <body>
-  <main>
-    <div class="logo">下载</div>
-    <h1>媒体下载器</h1>
-    <p class="sub">一个完全免费的 Chrome 扩展 + 本地下载器组合。<br>把视频链接粘进去，一键下载到本地。</p>
-
-    <div class="platforms">
-      <span class="chip">YouTube</span>
-      <span class="chip">抖音</span>
-      <span class="chip">B 站</span>
-      <span class="chip">小红书</span>
-      <span class="chip">网易云音乐</span>
-      <span class="chip">X</span>
-      <span class="chip">Envato</span>
+  <header>
+    <div class="nav">
+      <a class="brand" href="/">
+        <span class="brand-mark">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+        <span>Snap Download</span>
+      </a>
+      <nav class="nav-links">
+        <a href="#how">使用</a>
+        <a href="#platforms">支持平台</a>
+        <a href="chrome-extension-media-downloader.html">Chrome 扩展</a>
+        <a class="nav-cta" href="chrome-extension-media-downloader.html">下载桌面版</a>
+      </nav>
     </div>
+  </header>
 
-    <a id="downloadBtn" class="download" href="https://pub-a09def9dc3914e08b32c907023d891f2.r2.dev/MediaDownloader-Windows.zip" download>
-      <span style="font-size:22px;">⬇</span>
-      <span>立即下载 Windows 版</span>
-    </a>
-    <div class="download-meta">
-      v1.0.3 · 81.8 MB · Windows 10/11 · <code>https://pub-a09def9dc3914e08b32c907023d891f2.r2.dev</code>
+  <section class="hero">
+    <div class="hero-tag">
+      <span class="dot"></span>
+      <span>在线视频下载 · 免登录</span>
     </div>
+    <h1>粘贴链接，立即下载视频</h1>
+    <p class="hero-sub">支持 YouTube、B站、抖音、小红书、网易云音乐、X (Twitter)、Envato 等平台。视频音频一键下载，无水印。</p>
+  </section>
 
-    <div class="features">
-      <div class="feature">
-        <div class="ico">📥</div>
-        <h3>同时下载多条</h3>
-        <p>下载列表面板支持并发多任务，不用等一条下完再下另一条。</p>
+  <div class="input-wrap">
+    <form id="parseForm" class="input-box" autocomplete="off">
+      <input id="urlInput" type="text" inputmode="url" placeholder="粘贴视频链接，例如 https://www.bilibili.com/video/BV..." required>
+      <button type="submit" id="parseBtn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="7"/>
+          <path d="m21 21-4.35-4.35"/>
+        </svg>
+        获取下载链接
+      </button>
+    </form>
+    <div class="input-tools">
+      <span id="hintText">支持 mp4、webm、m4a、mp3 等格式</span>
+      <span class="paste" id="pasteBtn">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="8" y="2" width="8" height="4" rx="1"/>
+          <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+        </svg>
+        从剪贴板粘贴
+      </span>
+    </div>
+  </div>
+
+  <div class="hint" id="how">把视频链接粘贴到上面的输入框，按回车或点"获取下载链接"即可看到所有可用格式，点对应格式直接下载。</div>
+
+  <div class="status" id="statusArea" style="display:none">
+    <div class="status-card" id="statusCard">
+      <div class="spinner"></div>
+      <span id="statusText">正在解析链接…</span>
+    </div>
+  </div>
+
+  <section class="result" id="resultArea">
+    <div class="result-grid">
+      <div>
+        <div class="thumb" id="thumbBox">
+          <img id="thumbImg" alt="">
+          <span class="duration" id="duration" style="display:none"></span>
+        </div>
       </div>
-      <div class="feature">
-        <div class="ico">💾</div>
-        <h3>进度持久化</h3>
-        <p>下载中关掉 popup 也不影响进度。下次点开扩展自动从本机服务同步回来。</p>
-      </div>
-      <div class="feature">
-        <div class="ico">🔌</div>
-        <h3>免安装 Python</h3>
-        <p>内置便携版 Python 3.11 + 13 个预装依赖，下载就能用。</p>
-      </div>
-      <div class="feature">
-        <div class="ico">🪟</div>
-        <h3>静默运行</h3>
-        <p>本地服务以 pythonw.exe 启动，无黑窗。安装后开机自启，零操作。</p>
-      </div>
-    </div>
+      <div class="info">
+        <h2 id="titleText">—</h2>
+        <div class="meta" id="metaLine">
+          <span class="badge" id="platformBadge">—</span>
+          <span id="uploaderText"></span>
+          <span id="extractorText"></span>
+        </div>
 
-    <div class="links">
-      <a href="/chrome-extension-media-downloader.html">📖 安装与使用教程</a>
-      <a href="/disclaimer.html">⚖ 免责声明</a>
-      <a href="https://github.com/cy156906-glitch/XIAZAI" target="_blank" rel="noopener">📦 GitHub 仓库</a>
-    </div>
+        <div id="videoSection" style="display:none">
+          <h3 class="section-title">视频</h3>
+          <div class="format-list" id="videoList"></div>
+        </div>
 
-    <div class="foot">
-      本工具仅供个人学习与备份使用，不破解 DRM、不绕过付费限制。<br>
-      请仅下载你本人有权访问和保存的内容。
+        <div id="audioSection" style="display:none; margin-top: 22px">
+          <h3 class="section-title">音频</h3>
+          <div class="format-list" id="audioList"></div>
+        </div>
+      </div>
     </div>
-  </main>
+  </section>
+
+  <section class="platforms" id="platforms">
+    <span class="label">支持平台：</span>
+    <span class="pill">YouTube</span>
+    <span class="pill">B 站</span>
+    <span class="pill">抖音</span>
+    <span class="pill">小红书</span>
+    <span class="pill">网易云音乐</span>
+    <span class="pill">X (Twitter)</span>
+    <span class="pill">Envato</span>
+  </section>
+
+  <footer>
+    <a href="disclaimer.html">免责声明</a>
+    ·
+    <a href="chrome-extension-media-downloader.html">Chrome 扩展</a>
+    ·
+    <a href="bilibili-video-downloader.html">B 站下载</a>
+    ·
+    <a href="douyin-video-downloader.html">抖音下载</a>
+    ·
+    <a href="youtube-video-downloader.html">YouTube 下载</a>
+    <br><br>
+    © 2026 Snap Download · 仅供学习交流，请勿用于商业用途
+  </footer>
+
+  <script>
+    // ===== Config =====
+    const API = "https://xiazai-54ao.onrender.com";
+
+    // ===== Elements =====
+    const $ = (id) => document.getElementById(id);
+    const form = $("parseForm");
+    const input = $("urlInput");
+    const parseBtn = $("parseBtn");
+    const pasteBtn = $("pasteBtn");
+    const statusArea = $("statusArea");
+    const statusCard = $("statusCard");
+    const statusText = $("statusText");
+    const resultArea = $("resultArea");
+
+    // ===== Restore URL from query =====
+    const params = new URLSearchParams(location.search);
+    const initialUrl = params.get("v") || params.get("url") || "";
+    if (initialUrl) {
+      input.value = initialUrl;
+      // Auto-submit on load
+      setTimeout(() => form.dispatchEvent(new Event("submit", {cancelable:true})), 50);
+    }
+
+    // ===== Paste from clipboard =====
+    pasteBtn.addEventListener("click", async () => {
+      try {
+        const text = await navigator.clipboard.readText();
+        if (text) {
+          input.value = text.trim();
+          input.focus();
+        }
+      } catch (e) {
+        input.focus();
+      }
+    });
+
+    // ===== Helpers =====
+    function setStatus(text, kind) {
+      if (!text) {
+        statusArea.style.display = "none";
+        return;
+      }
+      statusArea.style.display = "block";
+      statusText.textContent = text;
+      statusCard.classList.toggle("error", kind === "error");
+    }
+
+    function fmtBytes(n) {
+      if (!n || isNaN(n)) return "—";
+      if (n < 1024) return n + " B";
+      if (n < 1024 * 1024) return (n / 1024).toFixed(1) + " KB";
+      if (n < 1024 * 1024 * 1024) return (n / 1024 / 1024).toFixed(1) + " MB";
+      return (n / 1024 / 1024 / 1024).toFixed(2) + " GB";
+    }
+
+    function fmtDuration(s) {
+      if (!s || isNaN(s)) return "";
+      s = Math.floor(s);
+      const h = Math.floor(s / 3600);
+      const m = Math.floor((s % 3600) / 60);
+      const sec = s % 60;
+      if (h > 0) return `${h}:${String(m).padStart(2,"0")}:${String(sec).padStart(2,"0")}`;
+      return `${m}:${String(sec).padStart(2,"0")}`;
+    }
+
+    function platformLabel(extractor) {
+      const map = {
+        youtube: "YouTube",
+        bilibili: "B 站",
+        douyin: "抖音",
+        xiaohongshu: "小红书",
+        neteasemusic: "网易云",
+        twitter: "X (Twitter)",
+        envato: "Envato",
+        tiktok: "TikTok",
+      };
+      const key = (extractor || "").toLowerCase();
+      for (const k in map) {
+        if (key.includes(k)) return map[k];
+      }
+      return extractor || "视频";
+    }
+
+    function pickSelector(f, kind) {
+      // Pick yt-dlp format selector. For video-with-audio combined, prefer bv*+ba/b.
+      if (kind === "video") {
+        if (f.is_audio_only) return null;
+        return `${f.id}+bestaudio/${f.id}/bv*+ba/b`;
+      } else {
+        return `${f.id}/bestaudio/best`;
+      }
+    }
+
+    function buildDownloadUrl(url, formatId) {
+      const u = new URL(`${API}/api/fetch`);
+      u.searchParams.set("url", url);
+      u.searchParams.set("format", formatId);
+      return u.toString();
+    }
+
+    function renderResult(info) {
+      // Meta
+      $("titleText").textContent = info.title || "未命名";
+      const platform = platformLabel(info.extractor);
+      $("platformBadge").textContent = platform;
+      $("uploaderText").textContent = info.uploader ? " · " + info.uploader : "";
+      $("extractorText").textContent = "";
+
+      // Thumbnail
+      if (info.thumbnail) {
+        $("thumbImg").src = info.thumbnail;
+        $("thumbImg").onerror = () => { $("thumbImg").src = ""; };
+      } else {
+        $("thumbImg").src = "";
+      }
+      const dur = fmtDuration(info.duration);
+      if (dur) {
+        $("duration").textContent = dur;
+        $("duration").style.display = "";
+      } else {
+        $("duration").style.display = "none";
+      }
+
+      // Formats
+      const videos = (info.formats || []).filter(f => f.is_video);
+      const audios = (info.formats || []).filter(f => f.is_audio_only);
+
+      const videoList = $("videoList");
+      videoList.innerHTML = "";
+      const audioList = $("audioList");
+      audioList.innerHTML = "";
+
+      if (videos.length) {
+        $("videoSection").style.display = "";
+        videos.forEach(f => {
+          const row = document.createElement("div");
+          row.className = "format";
+          const height = f.height ? `${f.height}p` : "—";
+          const size = fmtBytes(f.filesize);
+          const note = f.format_note || "";
+          const desc = `${height} · ${f.ext} · ${size}${note ? " · " + note : ""}`;
+          row.innerHTML = `
+            <div class="format-info">
+              <div class="format-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polygon points="23 7 16 12 23 17 23 7"/>
+                  <rect x="1" y="5" width="15" height="14" rx="2"/>
+                </svg>
+              </div>
+              <div class="format-text">
+                <div class="name">${height} <span style="color:var(--ink-3); font-weight:400; font-size:12px; margin-left:4px">${f.ext}${f.vcodec && f.vcodec !== "none" ? " · " + f.vcodec.split(".")[0] : ""}</span></div>
+                <div class="desc">${desc}</div>
+              </div>
+            </div>
+            <a class="format-btn" href="${buildDownloadUrl(info.webpage_url || location.href.replace(location.search,""), pickSelector(f, "video"))}" target="_blank" rel="noopener" download>下载</a>
+          `;
+          videoList.appendChild(row);
+        });
+      } else {
+        $("videoSection").style.display = "none";
+      }
+
+      if (audios.length) {
+        $("audioSection").style.display = "";
+        audios.forEach(f => {
+          const row = document.createElement("div");
+          row.className = "format";
+          const size = fmtBytes(f.filesize);
+          const abr = f.abr ? `${Math.round(f.abr)}kbps` : "";
+          const desc = `${f.ext} · ${size}${abr ? " · " + abr : ""}`;
+          row.innerHTML = `
+            <div class="format-info">
+              <div class="format-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M9 18V5l12-2v13"/>
+                  <circle cx="6" cy="18" r="3"/>
+                  <circle cx="18" cy="16" r="3"/>
+                </svg>
+              </div>
+              <div class="format-text">
+                <div class="name">音频 <span style="color:var(--ink-3); font-weight:400; font-size:12px; margin-left:4px">${f.ext}</span></div>
+                <div class="desc">${desc}</div>
+              </div>
+            </div>
+            <a class="format-btn" href="${buildDownloadUrl(info.webpage_url || location.href.replace(location.search,""), pickSelector(f, "audio"))}" target="_blank" rel="noopener" download>下载</a>
+          `;
+          audioList.appendChild(row);
+        });
+      } else {
+        $("audioSection").style.display = "none";
+      }
+
+      resultArea.classList.add("show");
+      // Smooth scroll
+      setTimeout(() => {
+        resultArea.scrollIntoView({behavior: "smooth", block: "start"});
+      }, 50);
+    }
+
+    function showError(msg) {
+      setStatus(msg || "解析失败，请检查链接是否正确，或稍后再试。", "error");
+      resultArea.classList.remove("show");
+    }
+
+    // ===== Submit =====
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const url = (input.value || "").trim();
+      if (!url) return;
+
+      // Update URL (shareable)
+      const u = new URL(location.href);
+      u.searchParams.set("v", url);
+      history.replaceState(null, "", u.toString());
+
+      parseBtn.disabled = true;
+      setStatus("正在解析链接…");
+      resultArea.classList.remove("show");
+
+      try {
+        const r = await fetch(`${API}/api/parse?url=${encodeURIComponent(url)}`, {
+          method: "GET",
+          headers: {"Accept": "application/json"},
+        });
+        const data = await r.json().catch(() => ({}));
+        if (!r.ok) {
+          showError(data.error || `请求失败 (${r.status})`);
+          return;
+        }
+        if (!data.formats || !data.formats.length) {
+          showError("这个链接没有可下载的格式（可能需要登录或受 DRM 保护）。");
+          return;
+        }
+        setStatus(null);
+        renderResult(data);
+      } catch (err) {
+        showError("无法连接到服务器，请检查网络或稍后再试。");
+      } finally {
+        parseBtn.disabled = false;
+      }
+    });
+  </script>
 </body>
 </html>
