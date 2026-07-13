@@ -744,11 +744,39 @@
       resultArea.classList.remove("show");
     }
 
+    // 提取分享文本里的第一个 URL
+    // - 抖音： "6.43 复制打开抖音，看看【xxx】 https://v.douyin.com/abc/ 09/14"
+    // - B 站： "【视频标题】 https://www.bilibili.com/video/BVxxx"
+    // - 直接粘贴完整 URL： "https://..."
+    function extractUrl(text) {
+      const s = (text || "").trim();
+      if (!s) return "";
+      // RFC 3986 子集 + 终止字符限制（避免吞掉末尾标点/中文/空白）
+      const URL_RE = /https?:\/\/[A-Za-z0-9._~:/?#\[\]@!$&'()*+,;=%-]+/;
+      const m = s.match(URL_RE);
+      if (m) {
+        // 去掉 URL 后面常见的全角标点/中文（防止匹配越界）
+        return m[0].replace(/[\u3000-\u303f\uff00-\uffef\u4e00-\u9fa5，。、！？；：）」』"']+$/, "");
+      }
+      return s;
+    }
+
     // ===== Submit =====
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
-      const url = (input.value || "").trim();
-      if (!url) return;
+      const raw = (input.value || "").trim();
+      if (!raw) return;
+
+      // 从分享文本里提取 URL（抖音 APP 复制出来是 "文字 文字 https://... 文字"）
+      const url = extractUrl(raw);
+      if (!url) {
+        showError("没找到链接，请粘贴完整的视频 URL（含 https://）。");
+        return;
+      }
+      if (url !== raw) {
+        // 静默把提取后的 URL 写回输入框，让用户看到我们用了哪个
+        input.value = url;
+      }
 
       // Update URL (shareable)
       const u = new URL(location.href);
